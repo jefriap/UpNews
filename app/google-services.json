@@ -1,0 +1,122 @@
+{
+  "project_info": {
+    "project_number": "278322912293",
+    "firebase_url": "https://my-app-17429-default-rtdb.firebaseio.com",
+    "project_id": "my-app-17429",
+    "storage_bucket": "my-app-17429.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:278322912293:android:8b60f85770632bbaedf3cc",
+        "android_client_info": {
+          "package_name": "com.myapp.map"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "278322912293-j33hqr11u9dd4o28rlue3q1r6me8uq2h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.myapp.map",
+            "certificate_hash": "c158d548f8460d9c140d0099afc0207310d0e93a"
+          }
+        },
+        {
+          "client_id": "278322912293-hbl0797vde8kv4cf87rkr2ukc9i8tr4p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPSZJtyBVME68NJb_ZMO1iB93Xs3oQx24"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "278322912293-hbl0797vde8kv4cf87rkr2ukc9i8tr4p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:278322912293:android:df4088c8508d46fcedf3cc",
+        "android_client_info": {
+          "package_name": "com.project.stoku"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "278322912293-sfu7s1mufnbmrvrge6od2d8adf5b7ul1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.project.stoku",
+            "certificate_hash": "c158d548f8460d9c140d0099afc0207310d0e93a"
+          }
+        },
+        {
+          "client_id": "278322912293-hbl0797vde8kv4cf87rkr2ukc9i8tr4p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPSZJtyBVME68NJb_ZMO1iB93Xs3oQx24"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "278322912293-hbl0797vde8kv4cf87rkr2ukc9i8tr4p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:278322912293:android:c4024fe67419c831edf3cc",
+        "android_client_info": {
+          "package_name": "com.upnews.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "278322912293-8876lgu1d0ljf908nqq4d22ombpd9vl2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.upnews.app",
+            "certificate_hash": "0a879b8eab66fdb76c26932db8f04f966c46f48e"
+          }
+        },
+        {
+          "client_id": "278322912293-hbl0797vde8kv4cf87rkr2ukc9i8tr4p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPSZJtyBVME68NJb_ZMO1iB93Xs3oQx24"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "278322912293-hbl0797vde8kv4cf87rkr2ukc9i8tr4p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
