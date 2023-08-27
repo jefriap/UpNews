@@ -18,10 +18,10 @@ package com.upnews.app
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.upnews.core.data.repository.UserDataRepository
-import com.upnews.core.model.data.UserData
 import com.upnews.app.MainActivityUiState.Loading
 import com.upnews.app.MainActivityUiState.Success
+import com.upnews.core.data.repository.UserDataRepository
+import com.upnews.core.model.data.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

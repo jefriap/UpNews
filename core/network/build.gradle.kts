@@ -35,7 +35,13 @@ android {
 }
 
 secrets {
-    defaultPropertiesFileName = "secrets/defaults.properties"
+    // Change the properties file from the default "secrets.properties" in your root project
+    // to another properties file in your root project.
+    propertiesFileName = "secrets/development.properties"
+
+    // A properties file containing default secret values. This file can be checked in version
+    // control.
+    defaultPropertiesFileName = "secrets/default.properties"
 }
 
 dependencies {

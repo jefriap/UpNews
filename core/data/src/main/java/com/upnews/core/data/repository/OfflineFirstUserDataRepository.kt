@@ -17,7 +17,6 @@
 package com.upnews.core.data.repository
 
 import androidx.annotation.VisibleForTesting
-import com.upnews.core.analytics.AnalyticsHelper
 import com.upnews.core.datastore.UpNewsPreferencesDataSource
 import com.upnews.core.model.data.DarkThemeConfig
 import com.upnews.core.model.data.ThemeBrand
@@ -27,7 +26,6 @@ import javax.inject.Inject
 
 class OfflineFirstUserDataRepository @Inject constructor(
     private val upnewsPreferencesDataSource: UpNewsPreferencesDataSource,
-    private val analyticsHelper: AnalyticsHelper,
 ) : UserDataRepository {
 
     override val userData: Flow<UserData> =
@@ -39,15 +37,10 @@ class OfflineFirstUserDataRepository @Inject constructor(
 
     override suspend fun toggleFollowedTopicId(followedTopicId: String, followed: Boolean) {
         upnewsPreferencesDataSource.toggleFollowedTopicId(followedTopicId, followed)
-        analyticsHelper.logTopicFollowToggled(followedTopicId, followed)
     }
 
     override suspend fun updateNewsResourceBookmark(newsResourceId: String, bookmarked: Boolean) {
         upnewsPreferencesDataSource.toggleNewsResourceBookmark(newsResourceId, bookmarked)
-        analyticsHelper.logNewsResourceBookmarkToggled(
-            newsResourceId = newsResourceId,
-            isBookmarked = bookmarked,
-        )
     }
 
     override suspend fun setNewsResourceViewed(newsResourceId: String, viewed: Boolean) =
@@ -55,21 +48,17 @@ class OfflineFirstUserDataRepository @Inject constructor(
 
     override suspend fun setThemeBrand(themeBrand: ThemeBrand) {
         upnewsPreferencesDataSource.setThemeBrand(themeBrand)
-        analyticsHelper.logThemeChanged(themeBrand.name)
     }
 
     override suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
         upnewsPreferencesDataSource.setDarkThemeConfig(darkThemeConfig)
-        analyticsHelper.logDarkThemeConfigChanged(darkThemeConfig.name)
     }
 
     override suspend fun setDynamicColorPreference(useDynamicColor: Boolean) {
         upnewsPreferencesDataSource.setDynamicColorPreference(useDynamicColor)
-        analyticsHelper.logDynamicColorPreferenceChanged(useDynamicColor)
     }
 
     override suspend fun setShouldHideOnboarding(shouldHideOnboarding: Boolean) {
         upnewsPreferencesDataSource.setShouldHideOnboarding(shouldHideOnboarding)
-        analyticsHelper.logOnboardingStateChanged(shouldHideOnboarding)
     }
 }

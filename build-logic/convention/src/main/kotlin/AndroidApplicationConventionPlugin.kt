@@ -15,8 +15,8 @@
  */
 
 import com.android.build.api.dsl.ApplicationExtension
-import com.upnews.app.configureGradleManagedDevices
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
+import com.upnews.app.configureGradleManagedDevices
 import com.upnews.app.configureKotlinAndroid
 import com.upnews.app.configurePrintApksTask
 import org.gradle.api.Plugin

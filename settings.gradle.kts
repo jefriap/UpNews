@@ -32,10 +32,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "UpNews"
 include(":app")
-include(":app-upnews-catalog")
-include(":benchmarks")
 
-include(":core:analytics")
 include(":core:common")
 include(":core:data")
 include(":core:data-test")
@@ -51,7 +48,6 @@ include(":core:ui")
 include(":core:datastore-test")
 
 include(":lint")
-include(":sync:work")
 
 include(":feature:bookmarks")
 include(":feature:foryou")

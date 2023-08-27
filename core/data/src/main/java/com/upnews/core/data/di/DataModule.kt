@@ -16,15 +16,9 @@
 
 package com.upnews.core.data.di
 
-import com.upnews.core.data.repository.DefaultRecentSearchRepository
-import com.upnews.core.data.repository.DefaultSearchContentsRepository
+import com.upnews.core.data.repository.NewsRepo
 import com.upnews.core.data.repository.NewsRepository
-import com.upnews.core.data.repository.OfflineFirstNewsRepository
-import com.upnews.core.data.repository.OfflineFirstTopicsRepository
 import com.upnews.core.data.repository.OfflineFirstUserDataRepository
-import com.upnews.core.data.repository.RecentSearchRepository
-import com.upnews.core.data.repository.SearchContentsRepository
-import com.upnews.core.data.repository.TopicsRepository
 import com.upnews.core.data.repository.UserDataRepository
 import com.upnews.core.data.util.ConnectivityManagerNetworkMonitor
 import com.upnews.core.data.util.NetworkMonitor
@@ -36,31 +30,15 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 interface DataModule {
-
-    @Binds
-    fun bindsTopicRepository(
-        topicsRepository: OfflineFirstTopicsRepository,
-    ): TopicsRepository
-
     @Binds
     fun bindsNewsResourceRepository(
-        newsRepository: OfflineFirstNewsRepository,
-    ): NewsRepository
+        newsRepository: NewsRepository,
+    ): NewsRepo
 
     @Binds
     fun bindsUserDataRepository(
         userDataRepository: OfflineFirstUserDataRepository,
     ): UserDataRepository
-
-    @Binds
-    fun bindsRecentSearchRepository(
-        recentSearchRepository: DefaultRecentSearchRepository,
-    ): RecentSearchRepository
-
-    @Binds
-    fun bindsSearchContentsRepository(
-        searchContentsRepository: DefaultSearchContentsRepository,
-    ): SearchContentsRepository
 
     @Binds
     fun bindsNetworkMonitor(

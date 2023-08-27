@@ -17,12 +17,12 @@
 package com.upnews.core.data_test
 
 import com.upnews.core.data.di.DataModule
-import com.upnews.core.data.repository.NewsRepository
+import com.upnews.core.data.repository.NewsRepo
 import com.upnews.core.data.repository.RecentSearchRepository
 import com.upnews.core.data.repository.SearchContentsRepository
 import com.upnews.core.data.repository.TopicsRepository
 import com.upnews.core.data.repository.UserDataRepository
-import com.upnews.core.data.repository.fake.FakeNewsRepository
+import com.upnews.core.data.repository.fake.FakeNewsRepo
 import com.upnews.core.data.repository.fake.FakeRecentSearchRepository
 import com.upnews.core.data.repository.fake.FakeSearchContentsRepository
 import com.upnews.core.data.repository.fake.FakeTopicsRepository
@@ -46,8 +46,8 @@ interface TestDataModule {
 
     @Binds
     fun bindsNewsResourceRepository(
-        fakeNewsRepository: FakeNewsRepository,
-    ): NewsRepository
+        fakeNewsRepository: FakeNewsRepo,
+    ): NewsRepo
 
     @Binds
     fun bindsUserDataRepository(

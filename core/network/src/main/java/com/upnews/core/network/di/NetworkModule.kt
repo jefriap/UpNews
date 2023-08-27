@@ -21,7 +21,6 @@ import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.util.DebugLogger
 import com.upnews.core.network.BuildConfig
-import com.upnews.core.network.fake.FakeAssetManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,12 +41,6 @@ object NetworkModule {
     fun providesNetworkJson(): Json = Json {
         ignoreUnknownKeys = true
     }
-
-    @Provides
-    @Singleton
-    fun providesFakeAssetManager(
-        @ApplicationContext context: Context,
-    ): FakeAssetManager = FakeAssetManager(context.assets::open)
 
     @Provides
     @Singleton

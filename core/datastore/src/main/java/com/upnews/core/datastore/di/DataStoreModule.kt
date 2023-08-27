@@ -20,12 +20,12 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
-import com.upnews.core.datastore.IntToStringIdsMigration
-import com.upnews.core.datastore.UserPreferences
-import com.upnews.core.datastore.UserPreferencesSerializer
 import com.upnews.core.common.network.Dispatcher
 import com.upnews.core.common.network.UpNewsDispatchers.IO
 import com.upnews.core.common.network.di.ApplicationScope
+import com.upnews.core.datastore.IntToStringIdsMigration
+import com.upnews.core.datastore.UserPreferences
+import com.upnews.core.datastore.UserPreferencesSerializer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

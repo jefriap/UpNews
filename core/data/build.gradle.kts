@@ -31,7 +31,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:analytics"))
     implementation(project(":core:common"))
     implementation(project(":core:database"))
     implementation(project(":core:datastore"))
@@ -39,9 +38,11 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:notifications"))
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.paging)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit.core)
 
     testImplementation(project(":core:datastore-test"))
     testImplementation(project(":core:testing"))

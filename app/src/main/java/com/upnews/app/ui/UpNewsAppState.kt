@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -30,9 +29,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
+import com.upnews.app.navigation.TopLevelDestination
+import com.upnews.app.navigation.TopLevelDestination.BOOKMARKS
+import com.upnews.app.navigation.TopLevelDestination.FOR_YOU
+import com.upnews.app.navigation.TopLevelDestination.INTERESTS
 import com.upnews.core.data.repository.UserNewsResourceRepository
 import com.upnews.core.data.util.NetworkMonitor
-import com.upnews.core.ui.TrackDisposableJank
 import com.upnews.feature.bookmarks.navigation.bookmarksRoute
 import com.upnews.feature.bookmarks.navigation.navigateToBookmarks
 import com.upnews.feature.foryou.navigation.forYouNavigationRoute
@@ -40,14 +42,10 @@ import com.upnews.feature.foryou.navigation.navigateToForYou
 import com.upnews.feature.interests.navigation.interestsRoute
 import com.upnews.feature.interests.navigation.navigateToInterestsGraph
 import com.upnews.feature.search.navigation.navigateToSearch
-import com.upnews.app.navigation.TopLevelDestination
-import com.upnews.app.navigation.TopLevelDestination.BOOKMARKS
-import com.upnews.app.navigation.TopLevelDestination.FOR_YOU
-import com.upnews.app.navigation.TopLevelDestination.INTERESTS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
@@ -55,24 +53,23 @@ import kotlinx.coroutines.flow.stateIn
 fun rememberUpNewsAppState(
     windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
-    userNewsResourceRepository: UserNewsResourceRepository,
+    userNewsResourceRepo: UserNewsResourceRepository,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
 ): UpNewsAppState {
-    NavigationTrackingSideEffect(navController)
     return remember(
         navController,
         coroutineScope,
         windowSizeClass,
         networkMonitor,
-        userNewsResourceRepository,
+        userNewsResourceRepo,
     ) {
         UpNewsAppState(
             navController,
             coroutineScope,
             windowSizeClass,
             networkMonitor,
-            userNewsResourceRepository,
+            userNewsResourceRepo,
         )
     }
 }
@@ -83,7 +80,7 @@ class UpNewsAppState(
     val coroutineScope: CoroutineScope,
     val windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
-    userNewsResourceRepository: UserNewsResourceRepository,
+    userNewsResourceRepo: UserNewsResourceRepository,
 ) {
     val currentDestination: NavDestination?
         @Composable get() = navController
@@ -120,18 +117,16 @@ class UpNewsAppState(
     /**
      * The top level destinations that have unread news resources.
      */
-    val topLevelDestinationsWithUnreadResources: StateFlow<Set<TopLevelDestination>> =
-        userNewsResourceRepository.observeAllForFollowedTopics()
-            .combine(userNewsResourceRepository.observeAllBookmarked()) { forYouNewsResources, bookmarkedNewsResources ->
-                setOfNotNull(
-                    FOR_YOU.takeIf { forYouNewsResources.any { !it.hasBeenViewed } },
-                    BOOKMARKS.takeIf { bookmarkedNewsResources.any { !it.hasBeenViewed } },
-                )
-            }.stateIn(
-                coroutineScope,
-                SharingStarted.WhileSubscribed(5_000),
-                initialValue = emptySet(),
-            )
+    val topLevelDestinationsWithUnreadResources: StateFlow<Set<TopLevelDestination>> = flowOf(
+        setOfNotNull(
+            FOR_YOU,
+            BOOKMARKS,
+        )
+    ).stateIn(
+        coroutineScope,
+        SharingStarted.WhileSubscribed(5_000),
+        initialValue = emptySet(),
+    )
 
     /**
      * UI logic for navigating to a top level destination in the app. Top level destinations have
@@ -166,23 +161,5 @@ class UpNewsAppState(
 
     fun navigateToSearch() {
         navController.navigateToSearch()
-    }
-}
-
-/**
- * Stores information about navigation events to be used with JankStats
- */
-@Composable
-private fun NavigationTrackingSideEffect(navController: NavHostController) {
-    TrackDisposableJank(navController) { metricsHolder ->
-        val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
-            metricsHolder.state?.putState("Navigation", destination.route.toString())
-        }
-
-        navController.addOnDestinationChangedListener(listener)
-
-        onDispose {
-            navController.removeOnDestinationChangedListener(listener)
-        }
     }
 }

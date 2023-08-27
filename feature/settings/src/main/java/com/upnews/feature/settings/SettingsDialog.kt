@@ -16,14 +16,10 @@
 
 package com.upnews.feature.settings
 
-import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,8 +40,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,8 +47,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-import com.upnews.core.designsystem.component.UpNewsTextButton
 import com.upnews.core.designsystem.theme.UpNewsTheme
 import com.upnews.core.designsystem.theme.supportsDynamicTheming
 import com.upnews.core.model.data.DarkThemeConfig
@@ -64,7 +56,6 @@ import com.upnews.core.model.data.DarkThemeConfig.LIGHT
 import com.upnews.core.model.data.ThemeBrand
 import com.upnews.core.model.data.ThemeBrand.ANDROID
 import com.upnews.core.model.data.ThemeBrand.DEFAULT
-import com.upnews.core.ui.TrackScreenViewEvent
 import com.upnews.feature.settings.R.string
 import com.upnews.feature.settings.SettingsUiState.Loading
 import com.upnews.feature.settings.SettingsUiState.Success
@@ -134,9 +125,7 @@ fun SettingsDialog(
                     }
                 }
                 Divider(Modifier.padding(top = 8.dp))
-                LinksPanel()
             }
-            TrackScreenViewEvent(screenName = "Settings")
         },
         confirmButton = {
             Text(
@@ -242,43 +231,6 @@ fun SettingsDialogThemeChooserRow(
         )
         Spacer(Modifier.width(8.dp))
         Text(text)
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun LinksPanel() {
-    FlowRow(
-        horizontalArrangement = Arrangement.spacedBy(
-            space = 16.dp,
-            alignment = Alignment.CenterHorizontally,
-        ),
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        val uriHandler = LocalUriHandler.current
-        UpNewsTextButton(
-            onClick = { uriHandler.openUri(PRIVACY_POLICY_URL) },
-        ) {
-            Text(text = stringResource(string.privacy_policy))
-        }
-        val context = LocalContext.current
-        UpNewsTextButton(
-            onClick = {
-                context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
-            },
-        ) {
-            Text(text = stringResource(string.licenses))
-        }
-        UpNewsTextButton(
-            onClick = { uriHandler.openUri(BRAND_GUIDELINES_URL) },
-        ) {
-            Text(text = stringResource(string.brand_guidelines))
-        }
-        UpNewsTextButton(
-            onClick = { uriHandler.openUri(FEEDBACK_URL) },
-        ) {
-            Text(text = stringResource(string.feedback))
-        }
     }
 }
 

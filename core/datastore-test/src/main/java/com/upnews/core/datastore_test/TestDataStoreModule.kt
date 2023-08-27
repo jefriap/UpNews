@@ -18,10 +18,10 @@ package com.upnews.core.datastore_test
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
+import com.upnews.core.common.network.di.ApplicationScope
 import com.upnews.core.datastore.UserPreferences
 import com.upnews.core.datastore.UserPreferencesSerializer
 import com.upnews.core.datastore.di.DataStoreModule
-import com.upnews.core.common.network.di.ApplicationScope
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent

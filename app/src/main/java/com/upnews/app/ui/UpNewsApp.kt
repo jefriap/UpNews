@@ -62,6 +62,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.upnews.app.R
+import com.upnews.app.navigation.TopLevelDestination
+import com.upnews.app.navigation.UpNewsNavHost
 import com.upnews.core.data.repository.UserNewsResourceRepository
 import com.upnews.core.data.util.NetworkMonitor
 import com.upnews.core.designsystem.component.UpNewsBackground
@@ -75,8 +77,6 @@ import com.upnews.core.designsystem.icon.UpNewsIcons
 import com.upnews.core.designsystem.theme.GradientColors
 import com.upnews.core.designsystem.theme.LocalGradientColors
 import com.upnews.feature.settings.SettingsDialog
-import com.upnews.app.navigation.UpNewsNavHost
-import com.upnews.app.navigation.TopLevelDestination
 import com.upnews.feature.settings.R as settingsR
 
 @OptIn(
@@ -88,11 +88,11 @@ import com.upnews.feature.settings.R as settingsR
 fun UpNewsApp(
     windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
-    userNewsResourceRepository: UserNewsResourceRepository,
+    userNewsResourceRepo: UserNewsResourceRepository,
     appState: UpNewsAppState = rememberUpNewsAppState(
         networkMonitor = networkMonitor,
         windowSizeClass = windowSizeClass,
-        userNewsResourceRepository = userNewsResourceRepository,
+        userNewsResourceRepo = userNewsResourceRepo,
     ),
 ) {
     val shouldShowGradientBackground =

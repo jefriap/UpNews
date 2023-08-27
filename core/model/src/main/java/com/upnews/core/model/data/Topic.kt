@@ -17,7 +17,7 @@
 package com.upnews.core.model.data
 
 /**
- * External data layer representation of a NiA Topic
+ * External data layer representation of a Topic
  */
 data class Topic(
     val id: String,

@@ -30,7 +30,7 @@ import kotlinx.datetime.toInstant
 val userNewsResourcesTestData: List<UserNewsResource> = UserData(
     bookmarkedNewsResources = setOf("1", "4"),
     viewedNewsResources = setOf("1", "2", "4"),
-    followedTopics = emptySet(),
+    followedSource = emptySet(),
     themeBrand = ThemeBrand.ANDROID,
     darkThemeConfig = DarkThemeConfig.DARK,
     shouldHideOnboarding = true,
