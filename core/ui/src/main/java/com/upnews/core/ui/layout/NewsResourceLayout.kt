@@ -22,7 +22,7 @@ import com.upnews.core.common.R as RCommon
 @Composable
 fun LazyPagingItems<NewsResource>.Layout(
     modifier: Modifier = Modifier,
-    onSourceClick: (String) -> Unit,
+    onSourceClick: (id: String, name: String) -> Unit,
 ) {
 
     val scrollState = rememberLazyListState()
@@ -76,7 +76,6 @@ fun LazyPagingItems<NewsResource>.Layout(
                         items(dummy) { item ->
                             item.CardItem(
                                 isLoading = true,
-                                onSourceClick = {},
                             )
                         }
                     }

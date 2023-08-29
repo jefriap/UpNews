@@ -73,7 +73,7 @@ fun NewsResource.CardItem(
     isLoading: Boolean = false,
     isBookmarked: Boolean = false,
     onToggleBookmark: (() -> Unit)? = null,
-    onSourceClick: (String) -> Unit,
+    onSourceClick: (id: String, name: String) -> Unit = { _, _ -> },
 ) {
     val clickActionLabel = stringResource(R.string.card_tap_action)
     val context = LocalContext.current
@@ -135,7 +135,7 @@ fun NewsResource.CardItem(
                         author,
                         sourceName,
                         onSourceClick = {
-                            onSourceClick(sourceId)
+                            onSourceClick(sourceId, sourceName)
                         },
                         enabled = sourceId.isNotBlank()
                     )
@@ -275,7 +275,7 @@ private fun ExpandedNewsResourcePreview(
                 newsResources[0].CardItem(
                     isBookmarked = false,
                     onToggleBookmark = {},
-                    onSourceClick = {}
+                    onSourceClick = {_, _ ->}
                 )
             }
         }

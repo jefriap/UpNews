@@ -33,7 +33,7 @@ import com.upnews.core.ui.layout.Layout
 
 @Composable
 internal fun ForYouRoute(
-    onSourceClick: (String) -> Unit,
+    onSourceClick: (id: String, name: String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ForYouViewModel = hiltViewModel(),
 ) {
@@ -60,7 +60,7 @@ internal fun ForYouScreen(
     newsResource: LazyPagingItems<NewsResource>,
     selectedCategory: CategoryType,
     onSelectCategory: (CategoryType) -> Unit,
-    onSourceClick: (String) -> Unit,
+    onSourceClick: (id: String, name: String) -> Unit,
 ) {
     val  categories = CategoryType.values().toList()
     

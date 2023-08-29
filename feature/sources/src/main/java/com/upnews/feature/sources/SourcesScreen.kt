@@ -42,7 +42,7 @@ import com.upnews.core.ui.layout.LayoutIllustration
 
 @Composable
 internal fun SourcesRoute(
-    onSourceClick: (String) -> Unit,
+    onSourceClick: (id: String, name: String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SourcesViewModel = hiltViewModel(),
 ) {
@@ -68,7 +68,7 @@ internal fun SourcesScreen(
     sourcesUiState: SourcesUiState,
     selectedCategory: CategoryType?,
     onSelectCategory: (CategoryType?) -> Unit,
-    onSourceClick: (String) -> Unit,
+    onSourceClick: (id: String, name: String) -> Unit,
 ) {
     val categories = CategoryType.values().toList()
 
@@ -86,8 +86,7 @@ internal fun SourcesScreen(
                 is SourcesUiState.Error -> {
                     LayoutIllustration(
                         title = stringResource(id = R.string.cannot_load),
-                        desc = sourcesUiState.message
-                            ?: stringResource(id = R.string.cannot_load_desc, "Berita"),
+                        desc = sourcesUiState.message,
                         onClickAction = { },
                         image = com.upnews.core.ui.R.drawable.ic_face_persevering,
                     )
@@ -112,7 +111,7 @@ internal fun SourcesScreen(
 internal fun List<Source>.Layout(
     modifier: Modifier = Modifier,
     isLoading: Boolean = false,
-    onSourceClick: (String) -> Unit = {},
+    onSourceClick: (id: String, name: String) -> Unit = {_,_ ->},
 ) {
     val scrollState = rememberLazyListState()
 
@@ -134,7 +133,6 @@ internal fun List<Source>.Layout(
                 items(this@Layout) { item ->
                     item.CardItem(
                         isLoading = true,
-                        onClick = {},
                     )
                 }
             }

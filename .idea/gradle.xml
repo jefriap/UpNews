@@ -44,8 +44,8 @@
             <option value="$PROJECT_DIR$/feature/foryou" />
             <option value="$PROJECT_DIR$/feature/search" />
             <option value="$PROJECT_DIR$/feature/settings" />
+            <option value="$PROJECT_DIR$/feature/source" />
             <option value="$PROJECT_DIR$/feature/sources" />
-            <option value="$PROJECT_DIR$/feature/topic" />
             <option value="$PROJECT_DIR$/lint" />
           </set>
         </option>

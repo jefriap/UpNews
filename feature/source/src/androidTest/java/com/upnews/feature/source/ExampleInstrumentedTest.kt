@@ -1,4 +1,4 @@
-package com.upnews.feature.topic
+package com.upnews.feature.source
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -17,6 +17,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.upnews.feature.topic.test", appContext.packageName)
+        assertEquals("com.upnews.feature.source.test", appContext.packageName)
     }
 }

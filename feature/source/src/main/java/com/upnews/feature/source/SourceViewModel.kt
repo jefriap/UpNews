@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-package com.upnews.feature.topic
+package com.upnews.feature.source
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.upnews.feature.source.navigation.SourceArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class TopicViewModel @Inject constructor(
-) : ViewModel() {}
+class SourceViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+) : ViewModel() {
+
+    private val sourceArgs: SourceArgs = SourceArgs(savedStateHandle)
+}

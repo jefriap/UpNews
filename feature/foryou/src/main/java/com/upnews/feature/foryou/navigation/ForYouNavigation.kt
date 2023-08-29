@@ -32,13 +32,13 @@ fun NavController.navigateToForYou(navOptions: NavOptions? = null) {
     this.navigate(forYouNavigationRoute, navOptions)
 }
 
-fun NavGraphBuilder.forYouScreen(onTopicClick: (String) -> Unit) {
+fun NavGraphBuilder.forYouScreen(onSourceClick: (id: String, name: String) -> Unit) {
     composable(
         route = forYouNavigationRoute,
         arguments = listOf(
             navArgument(LINKED_NEWS_RESOURCE_ID) { type = NavType.StringType },
         ),
     ) {
-        ForYouRoute(onTopicClick)
+        ForYouRoute(onSourceClick)
     }
 }

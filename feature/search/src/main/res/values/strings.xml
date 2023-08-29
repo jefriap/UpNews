@@ -21,8 +21,6 @@
     <string name="search_not_ready">Sorry, we are still processing the search index. Please come back later.</string>
     <string name="try_another_search">Try another search or explorer </string>
     <string name="sources">Sources</string>
-    <string name="to_browse_topics"> to browse topics</string>
-    <string name="topics">Topics</string>
     <string name="updates">Updates</string>
     <string name="recent_searches">Recent searches</string>
     <string name="clear_recent_searches_content_desc">Clear searches</string>

@@ -21,7 +21,7 @@ plugins {
 }
 
 android {
-    namespace = "com.upnews.feature.topic"
+    namespace = "com.upnews.feature.source"
 }
 
 dependencies {

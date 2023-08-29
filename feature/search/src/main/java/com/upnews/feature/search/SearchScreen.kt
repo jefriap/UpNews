@@ -27,7 +27,7 @@ internal fun SearchRoute(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
     onSourcesClick: () -> Unit,
-    onTopicClick: (String) -> Unit,
+    onSourceClick: (id: String, name: String) -> Unit,
     sourcesViewModel: SourcesViewModel = hiltViewModel(),
     searchViewModel: SearchViewModel = hiltViewModel(),
     forYouViewModel: ForYouViewModel = hiltViewModel(),

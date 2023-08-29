@@ -42,7 +42,7 @@ import com.upnews.core.ui.R
 fun Source.CardItem(
     modifier: Modifier = Modifier,
     isLoading: Boolean = false,
-    onClick: (String) -> Unit,
+    onClick: (id: String, name: String) -> Unit = { _, _ -> },
 ) {
     val clickActionLabel = stringResource(R.string.card_tap_action)
     val context = LocalContext.current
@@ -52,7 +52,7 @@ fun Source.CardItem(
     }
 
     Card(
-        onClick = { onClick(id) },
+        onClick = { onClick(id, name) },
         enabled = !isLoading,
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onSurface),

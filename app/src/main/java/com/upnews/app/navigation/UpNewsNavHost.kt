@@ -25,8 +25,8 @@ import com.upnews.feature.foryou.navigation.forYouNavigationRoute
 import com.upnews.feature.foryou.navigation.forYouScreen
 import com.upnews.feature.sources.navigation.sourcesGraph
 import com.upnews.feature.search.navigation.searchScreen
-import com.upnews.feature.topic.navigation.navigateToTopic
-import com.upnews.feature.topic.navigation.topicScreen
+import com.upnews.feature.source.navigation.navigateToSource
+import com.upnews.feature.source.navigation.sourceScreen
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at
@@ -47,18 +47,18 @@ fun UpNewsNavHost(
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        forYouScreen(onTopicClick = navController::navigateToTopic)
+        forYouScreen(onSourceClick = navController::navigateToSource)
         searchScreen(
             onBackClick = navController::popBackStack,
             onSourcesClick = { appState.navigateToTopLevelDestination(SOURCES) },
-            onTopicClick = navController::navigateToTopic,
+            onSourceClick = navController::navigateToSource,
         )
         sourcesGraph(
-            onTopicClick = navController::navigateToTopic,
+            onSourceClick = navController::navigateToSource,
             nestedGraphs = {
-                topicScreen(
+                sourceScreen(
                     onBackClick = navController::popBackStack,
-                    onTopicClick = navController::navigateToTopic,
+                    onSourceClick = navController::navigateToSource,
                 )
             },
         )

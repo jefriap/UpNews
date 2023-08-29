@@ -26,7 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun UpNewsTopicTag(
+fun UpNewsSourceTag(
     modifier: Modifier = Modifier,
     followed: Boolean,
     onClick: () -> Unit,
@@ -38,7 +38,7 @@ fun UpNewsTopicTag(
             MaterialTheme.colorScheme.primaryContainer
         } else {
             MaterialTheme.colorScheme.surfaceVariant.copy(
-                alpha = UpNewsTagDefaults.UnfollowedTopicTagContainerAlpha,
+                alpha = UpNewsTagDefaults.UnfollowedSourceTagContainerAlpha,
             )
         }
         TextButton(
@@ -48,7 +48,7 @@ fun UpNewsTopicTag(
                 containerColor = containerColor,
                 contentColor = contentColorFor(backgroundColor = containerColor),
                 disabledContainerColor = MaterialTheme.colorScheme.onSurface.copy(
-                    alpha = UpNewsTagDefaults.DisabledTopicTagContainerAlpha,
+                    alpha = UpNewsTagDefaults.DisabledSourceTagContainerAlpha,
                 ),
             ),
         ) {
@@ -63,9 +63,9 @@ fun UpNewsTopicTag(
  * Now in Android tag default values.
  */
 object UpNewsTagDefaults {
-    const val UnfollowedTopicTagContainerAlpha = 0.5f
+    const val UnfollowedSourceTagContainerAlpha = 0.5f
 
     // TODO: File bug
     // Button disabled container alpha value not exposed by ButtonDefaults
-    const val DisabledTopicTagContainerAlpha = 0.12f
+    const val DisabledSourceTagContainerAlpha = 0.12f
 }

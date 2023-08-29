@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.upnews.feature.topic.navigation
+package com.upnews.feature.source.navigation
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.SavedStateHandle
@@ -23,7 +23,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.upnews.feature.topic.TopicRoute
+import com.upnews.feature.source.SourceRoute
 import java.net.URLDecoder
 import java.net.URLEncoder
 import kotlin.text.Charsets.UTF_8
@@ -31,30 +31,36 @@ import kotlin.text.Charsets.UTF_8
 private val URL_CHARACTER_ENCODING = UTF_8.name()
 
 @VisibleForTesting
-internal const val topicIdArg = "topicId"
+internal const val sourceIdArg = "sourceId"
+internal const val sourceNameArg = "sourceName"
 
-internal class TopicArgs(val topicId: String) {
+internal class SourceArgs(val sourceId: String, val sourceName: String) {
     constructor(savedStateHandle: SavedStateHandle) :
-        this(URLDecoder.decode(checkNotNull(savedStateHandle[topicIdArg]), URL_CHARACTER_ENCODING))
+        this(
+            URLDecoder.decode(checkNotNull(savedStateHandle[sourceIdArg]), URL_CHARACTER_ENCODING),
+            URLDecoder.decode(checkNotNull(savedStateHandle[sourceNameArg]), URL_CHARACTER_ENCODING),
+        )
 }
 
-fun NavController.navigateToTopic(topicId: String) {
-    val encodedId = URLEncoder.encode(topicId, URL_CHARACTER_ENCODING)
-    this.navigate("topic_route/$encodedId") {
+fun NavController.navigateToSource(sourceId: String, sourceName: String) {
+    val encodedId = URLEncoder.encode(sourceId, URL_CHARACTER_ENCODING)
+    val encodedName = URLEncoder.encode(sourceName, URL_CHARACTER_ENCODING)
+    this.navigate("source_route/$encodedId/$encodedName") {
         launchSingleTop = true
     }
 }
 
-fun NavGraphBuilder.topicScreen(
+fun NavGraphBuilder.sourceScreen(
     onBackClick: () -> Unit,
-    onTopicClick: (String) -> Unit,
+    onSourceClick: (id: String, name: String) -> Unit,
 ) {
     composable(
-        route = "topic_route/{$topicIdArg}",
+        route = "source_route/{$sourceIdArg}/{$sourceNameArg}",
         arguments = listOf(
-            navArgument(topicIdArg) { type = NavType.StringType },
+            navArgument(sourceIdArg) { type = NavType.StringType },
+            navArgument(sourceNameArg) { type = NavType.StringType },
         ),
     ) {
-        TopicRoute(onBackClick = onBackClick, onTopicClick = onTopicClick)
+        SourceRoute(onBackClick = onBackClick, onSourceClick = onSourceClick)
     }
 }

@@ -31,7 +31,7 @@ fun NavController.navigateToSourcesGraph(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.sourcesGraph(
-    onTopicClick: (String) -> Unit,
+    onSourceClick: (id: String, name: String) -> Unit,
     nestedGraphs: NavGraphBuilder.() -> Unit,
 ) {
     navigation(
@@ -39,7 +39,7 @@ fun NavGraphBuilder.sourcesGraph(
         startDestination = sourcesRoute,
     ) {
         composable(route = sourcesRoute) {
-            SourcesRoute(onTopicClick)
+            SourcesRoute(onSourceClick)
         }
         nestedGraphs()
     }

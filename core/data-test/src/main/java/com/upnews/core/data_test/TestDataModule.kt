@@ -20,12 +20,12 @@ import com.upnews.core.data.di.DataModule
 import com.upnews.core.data.repository.NewsRepo
 import com.upnews.core.data.repository.RecentSearchRepository
 import com.upnews.core.data.repository.SearchContentsRepository
-import com.upnews.core.data.repository.TopicsRepository
+import com.upnews.core.data.repository.SourcesRepository
 import com.upnews.core.data.repository.UserDataRepo
 import com.upnews.core.data.repository.fake.FakeNewsRepo
 import com.upnews.core.data.repository.fake.FakeRecentSearchRepository
 import com.upnews.core.data.repository.fake.FakeSearchContentsRepository
-import com.upnews.core.data.repository.fake.FakeTopicsRepository
+import com.upnews.core.data.repository.fake.FakeSourcesRepository
 import com.upnews.core.data.repository.fake.FakeUserDataRepository
 import com.upnews.core.data.util.NetworkMonitor
 import dagger.Binds
@@ -40,9 +40,9 @@ import dagger.hilt.testing.TestInstallIn
 )
 interface TestDataModule {
     @Binds
-    fun bindsTopicRepository(
-        fakeTopicsRepository: FakeTopicsRepository,
-    ): TopicsRepository
+    fun bindsSourceRepository(
+        fakeSourcesRepository: FakeSourcesRepository,
+    ): SourcesRepository
 
     @Binds
     fun bindsNewsResourceRepository(
