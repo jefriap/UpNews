@@ -23,7 +23,6 @@ import androidx.datastore.dataStoreFile
 import com.upnews.core.common.network.Dispatcher
 import com.upnews.core.common.network.UpNewsDispatchers.IO
 import com.upnews.core.common.network.di.ApplicationScope
-import com.upnews.core.datastore.IntToStringIdsMigration
 import com.upnews.core.datastore.UserPreferences
 import com.upnews.core.datastore.UserPreferencesSerializer
 import dagger.Module
@@ -50,9 +49,6 @@ object DataStoreModule {
         DataStoreFactory.create(
             serializer = userPreferencesSerializer,
             scope = CoroutineScope(scope.coroutineContext + ioDispatcher),
-            migrations = listOf(
-                IntToStringIdsMigration,
-            ),
         ) {
             context.dataStoreFile("user_preferences.pb")
         }

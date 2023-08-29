@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-package com.upnews.core.data.di
+package com.upnews.core.network.di
 
-import com.upnews.core.data.repository.NewsRepo
-import com.upnews.core.data.repository.NewsRepository
-import com.upnews.core.data.repository.OfflineFirstUserDataRepository
-import com.upnews.core.data.repository.UserDataRepo
-import com.upnews.core.data.util.ConnectivityManagerNetworkMonitor
-import com.upnews.core.data.util.NetworkMonitor
+import com.upnews.core.network.UpNewsNetworkDataSource
+import com.upnews.core.network.retrofit.RetrofitUpNewsNetwork
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -29,19 +25,8 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface DataModule {
-    @Binds
-    fun bindsNewsResourceRepository(
-        newsRepository: NewsRepository,
-    ): NewsRepo
+interface UpNewsNetworkModule {
 
     @Binds
-    fun bindsUserDataRepository(
-        userDataRepository: OfflineFirstUserDataRepository,
-    ): UserDataRepo
-
-    @Binds
-    fun bindsNetworkMonitor(
-        networkMonitor: ConnectivityManagerNetworkMonitor,
-    ): NetworkMonitor
+    fun RetrofitUpNewsNetwork.binds(): UpNewsNetworkDataSource
 }

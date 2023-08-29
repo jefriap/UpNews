@@ -16,7 +16,6 @@
 
 package com.upnews.core.data.repository
 
-import com.upnews.core.model.data.UserNewsResource
 
 /**
  * Data layer implementation for [UserNewsResource]

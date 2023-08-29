@@ -20,7 +20,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.upnews.core.network.BuildConfig
 import com.upnews.core.network.UpNewsNetworkDataSource
 import com.upnews.core.network.model.BaseResponse
-import com.upnews.core.network.model.NetworkArticle
+import com.upnews.core.network.model.NetworkNews
 import kotlinx.serialization.json.Json
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaType
@@ -41,10 +41,19 @@ private interface RetrofitUpNewsNetworkApi {
     suspend fun getNewsResources(
         @Header("Authorization") apiKey: String,
         @Path("path") path: String,
-        @Query("q") query: String,
+        @Query("q") query: String?,
+        @Query("category") category: String?,
+        @Query("sources") sourceId: String?,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int,
-    ): BaseResponse<List<NetworkArticle>>
+    ): BaseResponse<List<NetworkNews>>
+
+    @GET("top-headlines/source")
+    suspend fun getSourceNewsResources(
+        @Header("Authorization") apiKey: String,
+        @Query("category") category: String?,
+        @Query("sources") sources: String,
+    ): BaseResponse<List<NetworkNews>>
 }
 
 private const val BASE_URL = BuildConfig.BASE_URL
@@ -70,14 +79,18 @@ class RetrofitUpNewsNetwork @Inject constructor(
 
     override suspend fun getNewsResources(
         path: String,
-        query: String,
+        query: String?,
+        category: String?,
+        sourceId: String?,
         page: Int,
         pageSize: Int,
-    ): BaseResponse<List<NetworkArticle>> =
+    ): BaseResponse<List<NetworkNews>> =
         networkApi.getNewsResources(
             apiKey = "Bearer $API_KEY",
             path = path,
             query = query,
+            category = category,
+            sourceId = sourceId,
             page = page,
             pageSize = pageSize,
         )

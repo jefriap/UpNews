@@ -17,11 +17,49 @@
 package com.upnews.feature.foryou
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
+import com.upnews.core.data.repository.NewsRepo
+import com.upnews.core.data.repository.NewsResourceQuery
+import com.upnews.core.data.repository.UserDataRepo
+import com.upnews.core.model.data.CategoryType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ForYouViewModel @Inject constructor(
+    private val newsRepo: NewsRepo,
+    private val userDataRepo: UserDataRepo,
 ) : ViewModel() {
 
+    val selectedCategory = userDataRepo.userData.map {
+        it.category
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = CategoryType.GENERAL,
+        )
+
+    val newsResources = selectedCategory.flatMapLatest {
+        newsRepo.getNewsResources(
+            query = NewsResourceQuery(
+                category = it,
+            ),
+        )
+    }.cachedIn(viewModelScope)
+
+    fun setEvent(event: ForYouEvent) {
+        when (event) {
+            is ForYouEvent.PerformChangeCategory -> {
+                viewModelScope.launch {
+                    userDataRepo.setCategoryPreference(event.category)
+                }
+            }
+        }
+    }
 }

@@ -21,7 +21,7 @@ import com.upnews.core.data.repository.NewsRepo
 import com.upnews.core.data.repository.RecentSearchRepository
 import com.upnews.core.data.repository.SearchContentsRepository
 import com.upnews.core.data.repository.TopicsRepository
-import com.upnews.core.data.repository.UserDataRepository
+import com.upnews.core.data.repository.UserDataRepo
 import com.upnews.core.data.repository.fake.FakeNewsRepo
 import com.upnews.core.data.repository.fake.FakeRecentSearchRepository
 import com.upnews.core.data.repository.fake.FakeSearchContentsRepository
@@ -52,7 +52,7 @@ interface TestDataModule {
     @Binds
     fun bindsUserDataRepository(
         userDataRepository: FakeUserDataRepository,
-    ): UserDataRepository
+    ): UserDataRepo
 
     @Binds
     fun bindsRecentSearchRepository(

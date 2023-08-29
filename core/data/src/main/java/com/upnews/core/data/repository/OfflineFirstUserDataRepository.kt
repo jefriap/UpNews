@@ -16,8 +16,8 @@
 
 package com.upnews.core.data.repository
 
-import androidx.annotation.VisibleForTesting
 import com.upnews.core.datastore.UpNewsPreferencesDataSource
+import com.upnews.core.model.data.CategoryType
 import com.upnews.core.model.data.DarkThemeConfig
 import com.upnews.core.model.data.ThemeBrand
 import com.upnews.core.model.data.UserData
@@ -25,40 +25,26 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class OfflineFirstUserDataRepository @Inject constructor(
-    private val upnewsPreferencesDataSource: UpNewsPreferencesDataSource,
-) : UserDataRepository {
+    private val upNewsPreferencesDataSource: UpNewsPreferencesDataSource,
+) : UserDataRepo {
 
     override val userData: Flow<UserData> =
-        upnewsPreferencesDataSource.userData
-
-    @VisibleForTesting
-    override suspend fun setFollowedTopicIds(followedTopicIds: Set<String>) =
-        upnewsPreferencesDataSource.setFollowedTopicIds(followedTopicIds)
-
-    override suspend fun toggleFollowedTopicId(followedTopicId: String, followed: Boolean) {
-        upnewsPreferencesDataSource.toggleFollowedTopicId(followedTopicId, followed)
-    }
-
-    override suspend fun updateNewsResourceBookmark(newsResourceId: String, bookmarked: Boolean) {
-        upnewsPreferencesDataSource.toggleNewsResourceBookmark(newsResourceId, bookmarked)
-    }
-
-    override suspend fun setNewsResourceViewed(newsResourceId: String, viewed: Boolean) =
-        upnewsPreferencesDataSource.setNewsResourceViewed(newsResourceId, viewed)
+        upNewsPreferencesDataSource.userData
 
     override suspend fun setThemeBrand(themeBrand: ThemeBrand) {
-        upnewsPreferencesDataSource.setThemeBrand(themeBrand)
+        upNewsPreferencesDataSource.setThemeBrand(themeBrand)
     }
 
     override suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
-        upnewsPreferencesDataSource.setDarkThemeConfig(darkThemeConfig)
+        upNewsPreferencesDataSource.setDarkThemeConfig(darkThemeConfig)
     }
 
     override suspend fun setDynamicColorPreference(useDynamicColor: Boolean) {
-        upnewsPreferencesDataSource.setDynamicColorPreference(useDynamicColor)
+        upNewsPreferencesDataSource.setDynamicColorPreference(useDynamicColor)
     }
 
-    override suspend fun setShouldHideOnboarding(shouldHideOnboarding: Boolean) {
-        upnewsPreferencesDataSource.setShouldHideOnboarding(shouldHideOnboarding)
+    override suspend fun setCategoryPreference(category: CategoryType) {
+        upNewsPreferencesDataSource.setCategoryPreference(category)
     }
+
 }

@@ -20,11 +20,11 @@ import javax.inject.Inject
 
 /**
  * Implements a [UserNewsResourceRepository] by combining a [NewsRepository] with a
- * [UserDataRepository].
+ * [UserDataRepo].
  */
 class CompositeUserNewsResourceRepository @Inject constructor(
     val newsRepository: NewsRepository,
-    val userDataRepository: UserDataRepository,
+    val userDataRepo: UserDataRepo,
 ) : UserNewsResourceRepository {
 
     /**

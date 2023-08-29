@@ -49,22 +49,17 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.upnews.app.R
 import com.upnews.app.navigation.TopLevelDestination
 import com.upnews.app.navigation.UpNewsNavHost
-import com.upnews.core.data.repository.UserNewsResourceRepository
 import com.upnews.core.data.util.NetworkMonitor
 import com.upnews.core.designsystem.component.UpNewsBackground
 import com.upnews.core.designsystem.component.UpNewsGradientBackground
@@ -76,6 +71,8 @@ import com.upnews.core.designsystem.component.UpNewsTopAppBar
 import com.upnews.core.designsystem.icon.UpNewsIcons
 import com.upnews.core.designsystem.theme.GradientColors
 import com.upnews.core.designsystem.theme.LocalGradientColors
+import com.upnews.core.designsystem.theme.UpNewsTheme
+import com.upnews.core.ui.DevicePreviews
 import com.upnews.feature.settings.SettingsDialog
 import com.upnews.feature.settings.R as settingsR
 
@@ -88,11 +85,9 @@ import com.upnews.feature.settings.R as settingsR
 fun UpNewsApp(
     windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
-    userNewsResourceRepo: UserNewsResourceRepository,
     appState: UpNewsAppState = rememberUpNewsAppState(
         networkMonitor = networkMonitor,
         windowSizeClass = windowSizeClass,
-        userNewsResourceRepo = userNewsResourceRepo,
     ),
 ) {
     val shouldShowGradientBackground =
@@ -130,8 +125,6 @@ fun UpNewsApp(
                 )
             }
 
-            val unreadDestinations by appState.topLevelDestinationsWithUnreadResources.collectAsStateWithLifecycle()
-
             Scaffold(
                 modifier = Modifier.semantics {
                     testTagsAsResourceId = true
@@ -144,7 +137,6 @@ fun UpNewsApp(
                     if (appState.shouldShowBottomBar) {
                         UpNewsBottomBar(
                             destinations = appState.topLevelDestinations,
-                            destinationsWithUnreadResources = unreadDestinations,
                             onNavigateToDestination = appState::navigateToTopLevelDestination,
                             currentDestination = appState.currentDestination,
                             modifier = Modifier.testTag("UpNewsBottomBar"),
@@ -166,7 +158,6 @@ fun UpNewsApp(
                     if (appState.shouldShowNavRail) {
                         UpNewsNavRail(
                             destinations = appState.topLevelDestinations,
-                            destinationsWithUnreadResources = unreadDestinations,
                             onNavigateToDestination = appState::navigateToTopLevelDestination,
                             currentDestination = appState.currentDestination,
                             modifier = Modifier
@@ -217,7 +208,6 @@ fun UpNewsApp(
 @Composable
 private fun UpNewsNavRail(
     destinations: List<TopLevelDestination>,
-    destinationsWithUnreadResources: Set<TopLevelDestination>,
     onNavigateToDestination: (TopLevelDestination) -> Unit,
     currentDestination: NavDestination?,
     modifier: Modifier = Modifier,
@@ -225,7 +215,6 @@ private fun UpNewsNavRail(
     UpNewsNavigationRail(modifier = modifier) {
         destinations.forEach { destination ->
             val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
-            val hasUnread = destinationsWithUnreadResources.contains(destination)
             UpNewsNavigationRailItem(
                 selected = selected,
                 onClick = { onNavigateToDestination(destination) },
@@ -242,7 +231,6 @@ private fun UpNewsNavRail(
                     )
                 },
                 label = { Text(stringResource(destination.iconTextId)) },
-                modifier = if (hasUnread) Modifier.notificationDot() else Modifier,
             )
         }
     }
@@ -251,7 +239,6 @@ private fun UpNewsNavRail(
 @Composable
 private fun UpNewsBottomBar(
     destinations: List<TopLevelDestination>,
-    destinationsWithUnreadResources: Set<TopLevelDestination>,
     onNavigateToDestination: (TopLevelDestination) -> Unit,
     currentDestination: NavDestination?,
     modifier: Modifier = Modifier,
@@ -260,7 +247,6 @@ private fun UpNewsBottomBar(
         modifier = modifier,
     ) {
         destinations.forEach { destination ->
-            val hasUnread = destinationsWithUnreadResources.contains(destination)
             val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
             UpNewsNavigationBarItem(
                 selected = selected,
@@ -278,32 +264,37 @@ private fun UpNewsBottomBar(
                     )
                 },
                 label = { Text(stringResource(destination.iconTextId)) },
-                modifier = if (hasUnread) Modifier.notificationDot() else Modifier,
             )
         }
     }
 }
 
-private fun Modifier.notificationDot(): Modifier =
-    composed {
-        val tertiaryColor = MaterialTheme.colorScheme.tertiary
-        drawWithContent {
-            drawContent()
-            drawCircle(
-                tertiaryColor,
-                radius = 5.dp.toPx(),
-                // This is based on the dimensions of the NavigationBar's "indicator pill";
-                // however, its parameters are private, so we must depend on them implicitly
-                // (NavigationBarTokens.ActiveIndicatorWidth = 64.dp)
-                center = center + Offset(
-                    64.dp.toPx() * .45f,
-                    32.dp.toPx() * -.45f - 6.dp.toPx(),
-                ),
-            )
-        }
-    }
-
 private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) =
     this?.hierarchy?.any {
         it.route?.contains(destination.name, true) ?: false
     } ?: false
+
+
+@DevicePreviews
+@Composable
+private fun UpNewsNavRailPreviews() {
+    UpNewsTheme {
+        UpNewsNavRail(
+            destinations = TopLevelDestination.values().asList(),
+            onNavigateToDestination = {},
+            currentDestination = null,
+        )
+    }
+}
+
+@DevicePreviews
+@Composable
+private fun UpNewsBottomBarPreviews() {
+    UpNewsTheme {
+        UpNewsBottomBar(
+            destinations = TopLevelDestination.values().asList(),
+            onNavigateToDestination = {},
+            currentDestination = null,
+        )
+    }
+}

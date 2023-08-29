@@ -6,14 +6,14 @@ import com.upnews.core.data.repository.NewsResourceQuery
 import com.upnews.core.data.util.Response
 import com.upnews.core.data.util.getResponse
 import com.upnews.core.network.UpNewsNetworkDataSource
-import com.upnews.core.network.model.NetworkArticle
+import com.upnews.core.network.model.NetworkNews
 
 class NewsPagingSource(
     private val network: UpNewsNetworkDataSource,
     private val query: NewsResourceQuery,
-) : PagingSource<Int, NetworkArticle>() {
+) : PagingSource<Int, NetworkNews>() {
 
-    override fun getRefreshKey(state: PagingState<Int, NetworkArticle>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, NetworkNews>): Int? {
         // We need to get the previous key (or next key if previous is null) of the offset
         // that was closest to the most recently accessed index.
         // Anchor position is the most recently accessed index
@@ -23,12 +23,14 @@ class NewsPagingSource(
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NetworkArticle> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NetworkNews> {
         val position = params.key ?: 1
         return when (val response = getResponse {
             network.getNewsResources(
                 path = query.path.value,
                 query = query.query,
+                category = query.category?.value,
+                sourceId = query.sourceId,
                 page = position,
                 pageSize = params.loadSize,
             )
@@ -49,6 +51,7 @@ class NewsPagingSource(
                     )
                 }
             }
+
             is Response.SuccessButEmpty -> {
                 LoadResult.Page(
                     data = emptyList(),
@@ -56,6 +59,7 @@ class NewsPagingSource(
                     nextKey = null
                 )
             }
+
             is Response.ConnectionError -> LoadResult.Error(Throwable(response.message))
             is Response.ServerError -> LoadResult.Error(Throwable(response.message))
         }

@@ -40,9 +40,11 @@ dependencies {
 
     debugApi(libs.androidx.compose.ui.tooling)
 
+    implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:domain"))
     implementation(project(":core:model"))
+    implementation(libs.accompanist.placeholder.material3)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.core.ktx)

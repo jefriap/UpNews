@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option java_package = "com.upnews.core.datastore";
+option java_multiple_files = true;
+
+enum CategoryTypeProto {
+  GENERAL = 0;
+  TECHNOLOGY = 1;
+  BUSINESS = 2;
+  ENTERTAINMENT = 3;
+  HEALTH = 4;
+  SCIENCE = 5;
+  SPORTS = 6;
+}

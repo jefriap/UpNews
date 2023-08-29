@@ -32,8 +32,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val TAG = "MainActivity"
-
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -44,7 +42,7 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var userNewsResourceRepo: UserNewsResourceRepository
 
-    val viewModel: MainActivityViewModel by viewModels()
+    private val viewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -107,7 +105,6 @@ class MainActivity : ComponentActivity() {
                 UpNewsApp(
                     networkMonitor = networkMonitor,
                     windowSizeClass = calculateWindowSizeClass(this),
-                    userNewsResourceRepo = userNewsResourceRepo,
                 )
             }
         }

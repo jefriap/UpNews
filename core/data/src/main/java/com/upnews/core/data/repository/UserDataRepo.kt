@@ -16,21 +16,36 @@
 
 package com.upnews.core.data.repository
 
-import androidx.paging.PagingData
 import com.upnews.core.model.data.CategoryType
-import com.upnews.core.model.data.NewsPath
-import com.upnews.core.model.data.NewsResource
+import com.upnews.core.model.data.DarkThemeConfig
+import com.upnews.core.model.data.ThemeBrand
+import com.upnews.core.model.data.UserData
 import kotlinx.coroutines.flow.Flow
 
-data class NewsResourceQuery(
-    val path: NewsPath = NewsPath.TOP_HEADLINES,
-    val query: String? = null,
-    val category: CategoryType? = null,
-    val sourceId: String? = null,
-)
+interface UserDataRepo {
 
-interface NewsRepo {
-    fun getNewsResources(
-        query: NewsResourceQuery,
-    ): Flow<PagingData<NewsResource>>
+    /**
+     * Stream of [UserData]
+     */
+    val userData: Flow<UserData>
+    /**
+     * Sets the desired theme brand.
+     */
+    suspend fun setThemeBrand(themeBrand: ThemeBrand)
+
+    /**
+     * Sets the desired dark theme config.
+     */
+    suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig)
+
+    /**
+     * Sets the preferred dynamic color config.
+     */
+    suspend fun setDynamicColorPreference(useDynamicColor: Boolean)
+
+    /**
+     * Sets the preferred category config.
+     */
+    suspend fun setCategoryPreference(category: CategoryType)
+
 }
