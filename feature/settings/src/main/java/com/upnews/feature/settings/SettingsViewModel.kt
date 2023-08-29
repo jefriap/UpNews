@@ -19,6 +19,7 @@ package com.upnews.feature.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.upnews.core.data.repository.UserDataRepo
+import com.upnews.core.model.data.Country
 import com.upnews.core.model.data.DarkThemeConfig
 import com.upnews.core.model.data.ThemeBrand
 import com.upnews.feature.settings.SettingsUiState.Loading
@@ -35,6 +36,7 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val userDataRepo: UserDataRepo,
 ) : ViewModel() {
+
     val settingsUiState: StateFlow<SettingsUiState> =
         userDataRepo.userData
             .map { userData ->
@@ -43,6 +45,7 @@ class SettingsViewModel @Inject constructor(
                         brand = userData.themeBrand,
                         useDynamicColor = userData.useDynamicColor,
                         darkThemeConfig = userData.darkThemeConfig,
+                        country = userData.country,
                     ),
                 )
             }
@@ -64,11 +67,18 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun updateCountry(country: Country) {
+        viewModelScope.launch {
+            userDataRepo.setCountry(country)
+        }
+    }
+
     fun updateDynamicColorPreference(useDynamicColor: Boolean) {
         viewModelScope.launch {
             userDataRepo.setDynamicColorPreference(useDynamicColor)
         }
     }
+
 }
 
 /**
@@ -78,9 +88,10 @@ data class UserEditableSettings(
     val brand: ThemeBrand,
     val useDynamicColor: Boolean,
     val darkThemeConfig: DarkThemeConfig,
+    val country: Country,
 )
 
 sealed interface SettingsUiState {
-    object Loading : SettingsUiState
+    data object Loading : SettingsUiState
     data class Success(val settings: UserEditableSettings) : SettingsUiState
 }

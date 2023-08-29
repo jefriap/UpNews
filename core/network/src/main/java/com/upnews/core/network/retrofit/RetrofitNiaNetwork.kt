@@ -21,6 +21,7 @@ import com.upnews.core.network.BuildConfig
 import com.upnews.core.network.UpNewsNetworkDataSource
 import com.upnews.core.network.model.BaseResponse
 import com.upnews.core.network.model.NetworkNews
+import com.upnews.core.network.model.NetworkSource
 import kotlinx.serialization.json.Json
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaType
@@ -43,17 +44,18 @@ private interface RetrofitUpNewsNetworkApi {
         @Path("path") path: String,
         @Query("q") query: String?,
         @Query("category") category: String?,
+        @Query("country") country: String?,
         @Query("sources") sourceId: String?,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int,
     ): BaseResponse<List<NetworkNews>>
 
-    @GET("top-headlines/source")
+    @GET("top-headlines/sources")
     suspend fun getSourceNewsResources(
         @Header("Authorization") apiKey: String,
         @Query("category") category: String?,
-        @Query("sources") sources: String,
-    ): BaseResponse<List<NetworkNews>>
+        @Query("country") country: String?,
+    ): BaseResponse<List<NetworkSource>>
 }
 
 private const val BASE_URL = BuildConfig.BASE_URL
@@ -81,6 +83,7 @@ class RetrofitUpNewsNetwork @Inject constructor(
         path: String,
         query: String?,
         category: String?,
+        country: String?,
         sourceId: String?,
         page: Int,
         pageSize: Int,
@@ -90,9 +93,20 @@ class RetrofitUpNewsNetwork @Inject constructor(
             path = path,
             query = query,
             category = category,
+            country = country,
             sourceId = sourceId,
             page = page,
             pageSize = pageSize,
+        )
+
+    override suspend fun getSources(
+        category: String?,
+        country: String?,
+    ): BaseResponse<List<NetworkSource>> =
+        networkApi.getSourceNewsResources(
+            apiKey = "Bearer $API_KEY",
+            category = category,
+            country = country,
         )
 
 }

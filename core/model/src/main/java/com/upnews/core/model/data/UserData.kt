@@ -17,11 +17,13 @@
 package com.upnews.core.model.data
 
 /**
- * Class summarizing user interest data
+ * Class summarizing user data
  */
 data class UserData(
     val themeBrand: ThemeBrand,
     val darkThemeConfig: DarkThemeConfig,
     val useDynamicColor: Boolean,
     val category: CategoryType,
+    val categorySource: CategoryType?,
+    val country: Country
 )

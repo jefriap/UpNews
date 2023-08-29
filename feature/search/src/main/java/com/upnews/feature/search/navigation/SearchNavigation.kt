@@ -30,7 +30,7 @@ fun NavController.navigateToSearch(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.searchScreen(
     onBackClick: () -> Unit,
-    onInterestsClick: () -> Unit,
+    onSourcesClick: () -> Unit,
     onTopicClick: (String) -> Unit,
 ) {
     // TODO: Handle back stack for each top-level destination. At the moment each top-level
@@ -38,7 +38,7 @@ fun NavGraphBuilder.searchScreen(
     composable(route = searchRoute) {
         SearchRoute(
             onBackClick = onBackClick,
-            onInterestsClick = onInterestsClick,
+            onSourcesClick = onSourcesClick,
             onTopicClick = onTopicClick,
         )
     }

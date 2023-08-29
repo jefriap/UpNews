@@ -18,6 +18,7 @@ package com.upnews.core.datastore
 
 import androidx.datastore.core.DataStore
 import com.upnews.core.model.data.CategoryType
+import com.upnews.core.model.data.Country
 import com.upnews.core.model.data.DarkThemeConfig
 import com.upnews.core.model.data.ThemeBrand
 import com.upnews.core.model.data.UserData
@@ -50,7 +51,9 @@ class UpNewsPreferencesDataSource @Inject constructor(
                     DarkThemeConfigProto.DARK_THEME_CONFIG_DARK -> DarkThemeConfig.DARK
                 },
                 useDynamicColor = it.useDynamicColor,
-                category = CategoryType.values()[it.categoryType.ordinal]
+                category = CategoryType.values()[it.categoryType.ordinal],
+                categorySource = if (it.categorySourcesType == CategorySourcesTypeProto.ALL_SOURCES) null else CategoryType.values()[it.categorySourcesType.ordinal - 1],
+                country = Country.values()[it.country.ordinal],
             )
         }
 
@@ -90,6 +93,25 @@ class UpNewsPreferencesDataSource @Inject constructor(
         userPreferences.updateData {
             it.copy {
                 this.categoryType = CategoryTypeProto.values()[category.ordinal]
+            }
+        }
+    }
+
+    suspend fun setCategorySourcesPreference(category: CategoryType?) {
+        userPreferences.updateData {
+            it.copy {
+                this.categorySourcesType = when (category) {
+                    null -> CategorySourcesTypeProto.ALL_SOURCES
+                    else -> CategorySourcesTypeProto.values()[category.ordinal + 1]
+                }
+            }
+        }
+    }
+
+    suspend fun setCountry(country: Country) {
+        userPreferences.updateData {
+            it.copy {
+                this.country = CountryProto.values()[country.ordinal]
             }
         }
     }

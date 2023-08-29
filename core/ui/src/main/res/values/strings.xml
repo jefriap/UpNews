@@ -19,6 +19,11 @@
     <string name="unbookmark">Unbookmark</string>
     <string name="back">Back</string>
 
+    <string name="category">Kategori</string>
+    <string name="language">Bahasa</string>
+    <string name="country">Negara</string>
+    <string name="visit_page">Kunjungi halaman</string>
+
     <string name="unread_resource_dot_content_description">Unread</string>
 
     <string name="card_tap_action">Open Resource Link</string>

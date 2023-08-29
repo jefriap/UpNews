@@ -23,8 +23,10 @@ import com.upnews.core.data.repository.NewsRepo
 import com.upnews.core.data.repository.NewsResourceQuery
 import com.upnews.core.data.repository.UserDataRepo
 import com.upnews.core.model.data.CategoryType
+import com.upnews.core.model.data.Country
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -45,11 +47,17 @@ class ForYouViewModel @Inject constructor(
         initialValue = CategoryType.GENERAL,
         )
 
-    val newsResources = selectedCategory.flatMapLatest {
+    val newsResources = combine(
+        selectedCategory,
+        userDataRepo.userData.map { it.country }
+    ) { category, country ->
+        NewsResourceQuery(
+            category = category,
+            country = country
+        )
+    }.flatMapLatest {
         newsRepo.getNewsResources(
-            query = NewsResourceQuery(
-                category = it,
-            ),
+            query = it,
         )
     }.cachedIn(viewModelScope)
 

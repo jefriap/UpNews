@@ -19,6 +19,8 @@ package com.upnews.core.data.di
 import com.upnews.core.data.repository.NewsRepo
 import com.upnews.core.data.repository.NewsRepository
 import com.upnews.core.data.repository.OfflineFirstUserDataRepository
+import com.upnews.core.data.repository.SourcesRepo
+import com.upnews.core.data.repository.SourcesRepository
 import com.upnews.core.data.repository.UserDataRepo
 import com.upnews.core.data.util.ConnectivityManagerNetworkMonitor
 import com.upnews.core.data.util.NetworkMonitor
@@ -34,6 +36,11 @@ interface DataModule {
     fun bindsNewsResourceRepository(
         newsRepository: NewsRepository,
     ): NewsRepo
+
+    @Binds
+    fun bindsSourcesRepository(
+        sourcesRepository: SourcesRepository,
+    ): SourcesRepo
 
     @Binds
     fun bindsUserDataRepository(

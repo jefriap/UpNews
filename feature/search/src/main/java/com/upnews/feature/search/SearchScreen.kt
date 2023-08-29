@@ -21,16 +21,16 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.upnews.feature.bookmarks.BookmarksViewModel
 import com.upnews.feature.foryou.ForYouViewModel
-import com.upnews.feature.interests.InterestsViewModel
+import com.upnews.feature.sources.SourcesViewModel
 
 @Composable
 internal fun SearchRoute(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
-    onInterestsClick: () -> Unit,
+    onSourcesClick: () -> Unit,
     onTopicClick: (String) -> Unit,
     bookmarksViewModel: BookmarksViewModel = hiltViewModel(),
-    interestsViewModel: InterestsViewModel = hiltViewModel(),
+    sourcesViewModel: SourcesViewModel = hiltViewModel(),
     searchViewModel: SearchViewModel = hiltViewModel(),
     forYouViewModel: ForYouViewModel = hiltViewModel(),
 ) {

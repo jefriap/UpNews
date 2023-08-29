@@ -16,7 +16,9 @@
 
 syntax = "proto3";
 
+import "com/upnews/app/data/category_sources_type.proto";
 import "com/upnews/app/data/category_type.proto";
+import "com/upnews/app/data/country.proto";
 import "com/upnews/app/data/dark_theme_config.proto";
 import "com/upnews/app/data/theme_brand.proto";
 
@@ -31,6 +33,7 @@ message UserPreferences {
     bool use_dynamic_color = 5;
 
     CategoryTypeProto category_type = 6;
+    CategorySourcesTypeProto category_sources_type = 7;
+    CountryProto country = 8;
 
-    // NEXT AVAILABLE ID: 21
 }

@@ -32,14 +32,14 @@ import androidx.tracing.trace
 import com.upnews.app.navigation.TopLevelDestination
 import com.upnews.app.navigation.TopLevelDestination.BOOKMARKS
 import com.upnews.app.navigation.TopLevelDestination.FOR_YOU
-import com.upnews.app.navigation.TopLevelDestination.INTERESTS
+import com.upnews.app.navigation.TopLevelDestination.SOURCES
 import com.upnews.core.data.util.NetworkMonitor
 import com.upnews.feature.bookmarks.navigation.bookmarksRoute
 import com.upnews.feature.bookmarks.navigation.navigateToBookmarks
 import com.upnews.feature.foryou.navigation.forYouNavigationRoute
 import com.upnews.feature.foryou.navigation.navigateToForYou
-import com.upnews.feature.interests.navigation.interestsRoute
-import com.upnews.feature.interests.navigation.navigateToInterestsGraph
+import com.upnews.feature.sources.navigation.sourcesRoute
+import com.upnews.feature.sources.navigation.navigateToSourcesGraph
 import com.upnews.feature.search.navigation.navigateToSearch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -83,7 +83,7 @@ class UpNewsAppState(
         @Composable get() = when (currentDestination?.route) {
             forYouNavigationRoute -> FOR_YOU
             bookmarksRoute -> BOOKMARKS
-            interestsRoute -> INTERESTS
+            sourcesRoute -> SOURCES
             else -> null
         }
 
@@ -133,7 +133,7 @@ class UpNewsAppState(
             when (topLevelDestination) {
                 FOR_YOU -> navController.navigateToForYou(topLevelNavOptions)
                 BOOKMARKS -> navController.navigateToBookmarks(topLevelNavOptions)
-                INTERESTS -> navController.navigateToInterestsGraph(topLevelNavOptions)
+                SOURCES -> navController.navigateToSourcesGraph(topLevelNavOptions)
             }
         }
     }

@@ -13,16 +13,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import com.upnews.core.common.util.DummyData
 import com.upnews.core.model.data.NewsResource
 import com.upnews.core.ui.R
 import com.upnews.core.ui.card.CardItem
-import com.upnews.core.ui.util.DummyData
 import com.upnews.core.common.R as RCommon
 
 @Composable
 fun LazyPagingItems<NewsResource>.Layout(
     modifier: Modifier = Modifier,
-    onClickItem: (NewsResource) -> Unit,
     onSourceClick: (String) -> Unit,
 ) {
 
@@ -42,7 +41,7 @@ fun LazyPagingItems<NewsResource>.Layout(
                     desc = (loadState.refresh as? LoadState.Error)?.error?.message
                         ?: stringResource(id = RCommon.string.not_found_desc),
                     onClickAction = { refresh() },
-                    image = R.drawable.il_empty,
+                    image = R.drawable.ic_lightbulb_question,
                 )
             }
 
@@ -52,7 +51,7 @@ fun LazyPagingItems<NewsResource>.Layout(
                     desc = (loadState.refresh as? LoadState.Error)?.error?.message
                         ?: stringResource(id = RCommon.string.cannot_load_desc, "Berita"),
                     onClickAction = { refresh() },
-                    image = R.drawable.il_sorry,
+                    image = R.drawable.ic_face_persevering,
                 )
             }
 
@@ -69,7 +68,6 @@ fun LazyPagingItems<NewsResource>.Layout(
                         ) { index ->
                             val item = this@Layout[index]
                             item?.CardItem(
-                                onClick = { onClickItem(item) },
                                 onSourceClick = onSourceClick,
                             )
                         }
@@ -78,7 +76,6 @@ fun LazyPagingItems<NewsResource>.Layout(
                         items(dummy) { item ->
                             item.CardItem(
                                 isLoading = true,
-                                onClick = {},
                                 onSourceClick = {},
                             )
                         }

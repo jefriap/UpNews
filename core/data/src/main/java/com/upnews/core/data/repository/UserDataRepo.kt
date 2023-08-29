@@ -17,6 +17,7 @@
 package com.upnews.core.data.repository
 
 import com.upnews.core.model.data.CategoryType
+import com.upnews.core.model.data.Country
 import com.upnews.core.model.data.DarkThemeConfig
 import com.upnews.core.model.data.ThemeBrand
 import com.upnews.core.model.data.UserData
@@ -47,5 +48,15 @@ interface UserDataRepo {
      * Sets the preferred category config.
      */
     suspend fun setCategoryPreference(category: CategoryType)
+
+    /**
+     * Sets the preferred category source config.
+     */
+    suspend fun setCategorySourcesPreference(category: CategoryType?)
+
+    /**
+     * Sets the preferred country config.
+     */
+    suspend fun setCountry(country: Country)
 
 }

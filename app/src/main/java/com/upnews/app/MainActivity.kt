@@ -21,7 +21,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.upnews.app.MainActivityUiState.Loading
 import com.upnews.app.MainActivityUiState.Success
 import com.upnews.app.ui.UpNewsApp
-import com.upnews.core.data.repository.UserNewsResourceRepository
 import com.upnews.core.data.util.NetworkMonitor
 import com.upnews.core.designsystem.theme.UpNewsTheme
 import com.upnews.core.model.data.DarkThemeConfig
@@ -38,9 +37,6 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var networkMonitor: NetworkMonitor
-
-    @Inject
-    lateinit var userNewsResourceRepo: UserNewsResourceRepository
 
     private val viewModel: MainActivityViewModel by viewModels()
 

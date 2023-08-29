@@ -18,6 +18,7 @@ package com.upnews.core.data.repository
 
 import androidx.paging.PagingData
 import com.upnews.core.model.data.CategoryType
+import com.upnews.core.model.data.Country
 import com.upnews.core.model.data.NewsPath
 import com.upnews.core.model.data.NewsResource
 import kotlinx.coroutines.flow.Flow
@@ -27,6 +28,7 @@ data class NewsResourceQuery(
     val query: String? = null,
     val category: CategoryType? = null,
     val sourceId: String? = null,
+    val country: Country,
 )
 
 interface NewsRepo {

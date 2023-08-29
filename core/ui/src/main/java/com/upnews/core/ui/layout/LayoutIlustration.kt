@@ -1,9 +1,7 @@
 package com.upnews.core.ui.layout
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,17 +37,16 @@ fun LayoutIllustration(
     scrollState: ScrollState? = null,
     title: String,
     desc: String,
-    @DrawableRes image: Int = R.drawable.il_empty,
+    @DrawableRes image: Int = R.drawable.ic_lightbulb_question,
     onClickAction: (() -> Unit)? = null,
     labelAction: String = stringResource(id = RCommon.string.try_again),
-    containerColorAction: Color = MaterialTheme.colorScheme.primary,
-    contentColorAction: Color = Color.White,
+    containerColorAction: Color = MaterialTheme.colorScheme.onBackground,
+    contentColorAction: Color = MaterialTheme.colorScheme.surface,
     horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     verticalArrangement: Arrangement.Vertical = Arrangement.Center,
 ) {
     Column(
         modifier = modifier
-            .background(color = Color.White)
             .fillMaxSize()
             .padding(horizontal = 8.dp)
             .apply {
@@ -58,10 +56,11 @@ fun LayoutIllustration(
         horizontalAlignment = horizontalAlignment,
         verticalArrangement = verticalArrangement
     ) {
-        Image(
+        Icon(
             painter = painterResource(id = image),
+            tint = MaterialTheme.colorScheme.onBackground,
             contentDescription = "Empty Data",
-            modifier = Modifier.size(200.dp)
+            modifier = Modifier.size(160.dp)
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(

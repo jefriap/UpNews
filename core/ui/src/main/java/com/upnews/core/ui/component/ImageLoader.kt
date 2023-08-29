@@ -22,7 +22,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.compose.rememberAsyncImagePainter
-import com.upnews.core.ui.util.shimmer
+import com.upnews.core.common.util.shimmer
 
 @Composable
 fun ImageLoader(

@@ -18,6 +18,7 @@ package com.upnews.core.data.repository
 
 import com.upnews.core.datastore.UpNewsPreferencesDataSource
 import com.upnews.core.model.data.CategoryType
+import com.upnews.core.model.data.Country
 import com.upnews.core.model.data.DarkThemeConfig
 import com.upnews.core.model.data.ThemeBrand
 import com.upnews.core.model.data.UserData
@@ -45,6 +46,14 @@ class OfflineFirstUserDataRepository @Inject constructor(
 
     override suspend fun setCategoryPreference(category: CategoryType) {
         upNewsPreferencesDataSource.setCategoryPreference(category)
+    }
+
+    override suspend fun setCategorySourcesPreference(category: CategoryType?) {
+        upNewsPreferencesDataSource.setCategorySourcesPreference(category)
+    }
+
+    override suspend fun setCountry(country: Country) {
+        upNewsPreferencesDataSource.setCountry(country)
     }
 
 }

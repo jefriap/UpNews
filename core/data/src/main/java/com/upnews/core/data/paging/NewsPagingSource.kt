@@ -5,6 +5,7 @@ import androidx.paging.PagingState
 import com.upnews.core.data.repository.NewsResourceQuery
 import com.upnews.core.data.util.Response
 import com.upnews.core.data.util.getResponse
+import com.upnews.core.model.data.Country
 import com.upnews.core.network.UpNewsNetworkDataSource
 import com.upnews.core.network.model.NetworkNews
 
@@ -30,6 +31,7 @@ class NewsPagingSource(
                 path = query.path.value,
                 query = query.query,
                 category = query.category?.value,
+                country = if (query.country == Country.ALL) null else query.country.code,
                 sourceId = query.sourceId,
                 page = position,
                 pageSize = params.loadSize,

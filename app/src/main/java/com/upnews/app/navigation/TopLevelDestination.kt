@@ -21,7 +21,7 @@ import com.upnews.app.R
 import com.upnews.core.designsystem.icon.UpNewsIcons
 import com.upnews.feature.bookmarks.R as bookmarksR
 import com.upnews.feature.foryou.R as forYouR
-import com.upnews.feature.interests.R as interestsR
+import com.upnews.feature.sources.R as sourcesR
 
 /**
  * Type for the top level destinations in the application. Each of these destinations
@@ -46,10 +46,10 @@ enum class TopLevelDestination(
         iconTextId = bookmarksR.string.saved,
         titleTextId = bookmarksR.string.saved,
     ),
-    INTERESTS(
+    SOURCES(
         selectedIcon = UpNewsIcons.Grid3x3,
         unselectedIcon = UpNewsIcons.Grid3x3,
-        iconTextId = interestsR.string.interests,
-        titleTextId = interestsR.string.interests,
+        iconTextId = sourcesR.string.sources,
+        titleTextId = sourcesR.string.sources,
     ),
 }

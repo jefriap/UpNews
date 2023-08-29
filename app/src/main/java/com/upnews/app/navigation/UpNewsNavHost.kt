@@ -19,12 +19,12 @@ package com.upnews.app.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
-import com.upnews.app.navigation.TopLevelDestination.INTERESTS
+import com.upnews.app.navigation.TopLevelDestination.SOURCES
 import com.upnews.app.ui.UpNewsAppState
 import com.upnews.feature.bookmarks.navigation.bookmarksScreen
 import com.upnews.feature.foryou.navigation.forYouNavigationRoute
 import com.upnews.feature.foryou.navigation.forYouScreen
-import com.upnews.feature.interests.navigation.interestsGraph
+import com.upnews.feature.sources.navigation.sourcesGraph
 import com.upnews.feature.search.navigation.searchScreen
 import com.upnews.feature.topic.navigation.navigateToTopic
 import com.upnews.feature.topic.navigation.topicScreen
@@ -56,10 +56,10 @@ fun UpNewsNavHost(
         )
         searchScreen(
             onBackClick = navController::popBackStack,
-            onInterestsClick = { appState.navigateToTopLevelDestination(INTERESTS) },
+            onSourcesClick = { appState.navigateToTopLevelDestination(SOURCES) },
             onTopicClick = navController::navigateToTopic,
         )
-        interestsGraph(
+        sourcesGraph(
             onTopicClick = navController::navigateToTopic,
             nestedGraphs = {
                 topicScreen(

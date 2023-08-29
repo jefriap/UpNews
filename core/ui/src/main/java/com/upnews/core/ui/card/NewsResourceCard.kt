@@ -16,7 +16,9 @@
 
 package com.upnews.core.ui.card
 
+import android.net.Uri
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,9 +36,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.onClick
@@ -45,20 +52,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.upnews.core.common.R.*
+import com.upnews.core.common.util.PreviewParameterProvider
+import com.upnews.core.common.util.getFormatDate
+import com.upnews.core.common.util.launchCustomChromeTab
+import com.upnews.core.common.util.shimmer
 import com.upnews.core.designsystem.component.UpNewsIconToggleButton
 import com.upnews.core.designsystem.icon.UpNewsIcons
 import com.upnews.core.designsystem.theme.UpNewsTheme
 import com.upnews.core.model.data.NewsResource
 import com.upnews.core.ui.R
 import com.upnews.core.ui.component.ImageLoader
-import com.upnews.core.ui.util.PreviewParameterProvider
-import com.upnews.core.ui.util.getFormatDate
-import com.upnews.core.ui.util.shimmer
 
 /**
  * [NewsResource] card used on the following screens: For You, Saved
  */
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsResource.CardItem(
@@ -66,12 +73,19 @@ fun NewsResource.CardItem(
     isLoading: Boolean = false,
     isBookmarked: Boolean = false,
     onToggleBookmark: (() -> Unit)? = null,
-    onClick: () -> Unit,
     onSourceClick: (String) -> Unit,
 ) {
     val clickActionLabel = stringResource(R.string.card_tap_action)
+    val context = LocalContext.current
+    val backgroundColor = MaterialTheme.colorScheme.background.toArgb()
+    val resourceUrl by remember {
+        mutableStateOf(Uri.parse(url))
+    }
+
     Card(
-        onClick = onClick,
+        onClick = {
+            launchCustomChromeTab(context, resourceUrl, backgroundColor)
+        },
         enabled = !isLoading,
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -92,8 +106,9 @@ fun NewsResource.CardItem(
                     isLoading = isLoading,
                     errorMessage = stringResource(
                         string.cannot_load_desc, stringResource(
-                        id = string.image
-                    )),
+                            id = string.image
+                        )
+                    ),
                     contentScale = ContentScale.FillBounds
                 )
             }
@@ -121,7 +136,8 @@ fun NewsResource.CardItem(
                         sourceName,
                         onSourceClick = {
                             onSourceClick(sourceId)
-                        }
+                        },
+                        enabled = sourceId.isNotBlank()
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     NewsResourceShortDescription(isLoading, description)
@@ -165,15 +181,17 @@ fun BookmarkButton(
         },
     )
 }
+
 @Composable
 fun NewsResourceMetaData(
     isLoading: Boolean,
     publishDate: String,
     author: String,
     sourceName: String,
-    onSourceClick: () -> Unit
+    onSourceClick: () -> Unit,
+    enabled: Boolean,
 ) {
-    val formattedDate = publishDate.getFormatDate(
+    val formattedDate = publishDate.take(10).getFormatDate(
         oldPattern = "yyyy-MM-dd",
     )
     Text(
@@ -181,17 +199,19 @@ fun NewsResourceMetaData(
             stringResource(R.string.card_meta_data_text, formattedDate, author)
         } else {
             formattedDate
-        }, modifier = Modifier.shimmer(isLoading),
+        },
+        modifier = Modifier.shimmer(isLoading),
         style = MaterialTheme.typography.labelSmall,
     )
     if (sourceName.isNotBlank()) {
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = sourceName, modifier = Modifier
+            text = sourceName,
+            modifier = Modifier
                 .shimmer(isLoading)
-                .clickable { onSourceClick() },
+                .clickable(enabled) { onSourceClick() },
             style = MaterialTheme.typography.labelMedium.copy(
-                color = Color.Blue
+                color = if (enabled) Color.Blue else Color.Unspecified
             ),
         )
     }
@@ -202,10 +222,23 @@ fun NewsResourceShortDescription(
     isLoading: Boolean,
     newsResourceShortDescription: String,
 ) {
-    Text(
-        text = newsResourceShortDescription,
-        modifier = Modifier.shimmer(isLoading),
-        style = MaterialTheme.typography.bodyLarge)
+    if (isLoading) {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            repeat(4) {
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(20.dp)
+                        .shimmer(true)
+                )
+            }
+        }
+    } else {
+        Text(
+            text = newsResourceShortDescription,
+            style = MaterialTheme.typography.bodyLarge
+        )
+    }
 }
 
 @Preview("Bookmark Button")
@@ -241,7 +274,6 @@ private fun ExpandedNewsResourcePreview(
             Surface {
                 newsResources[0].CardItem(
                     isBookmarked = false,
-                    onClick = {},
                     onToggleBookmark = {},
                     onSourceClick = {}
                 )
