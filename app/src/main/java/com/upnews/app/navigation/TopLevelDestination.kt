@@ -19,7 +19,6 @@ package com.upnews.app.navigation
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.upnews.app.R
 import com.upnews.core.designsystem.icon.UpNewsIcons
-import com.upnews.feature.bookmarks.R as bookmarksR
 import com.upnews.feature.foryou.R as forYouR
 import com.upnews.feature.sources.R as sourcesR
 
@@ -39,12 +38,6 @@ enum class TopLevelDestination(
         unselectedIcon = UpNewsIcons.UpcomingBorder,
         iconTextId = forYouR.string.for_you,
         titleTextId = R.string.app_name,
-    ),
-    BOOKMARKS(
-        selectedIcon = UpNewsIcons.Bookmarks,
-        unselectedIcon = UpNewsIcons.BookmarksBorder,
-        iconTextId = bookmarksR.string.saved,
-        titleTextId = bookmarksR.string.saved,
     ),
     SOURCES(
         selectedIcon = UpNewsIcons.Grid3x3,

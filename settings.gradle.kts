@@ -49,7 +49,6 @@ include(":core:datastore-test")
 
 include(":lint")
 
-include(":feature:bookmarks")
 include(":feature:foryou")
 include(":feature:sources")
 include(":feature:search")

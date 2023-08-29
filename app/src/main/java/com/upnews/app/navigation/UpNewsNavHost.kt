@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.upnews.app.navigation.TopLevelDestination.SOURCES
 import com.upnews.app.ui.UpNewsAppState
-import com.upnews.feature.bookmarks.navigation.bookmarksScreen
 import com.upnews.feature.foryou.navigation.forYouNavigationRoute
 import com.upnews.feature.foryou.navigation.forYouScreen
 import com.upnews.feature.sources.navigation.sourcesGraph
@@ -39,7 +38,6 @@ import com.upnews.feature.topic.navigation.topicScreen
 @Composable
 fun UpNewsNavHost(
     appState: UpNewsAppState,
-    onShowSnackbar: suspend (String, String?) -> Boolean,
     modifier: Modifier = Modifier,
     startDestination: String = forYouNavigationRoute,
 ) {
@@ -50,10 +48,6 @@ fun UpNewsNavHost(
         modifier = modifier,
     ) {
         forYouScreen(onTopicClick = navController::navigateToTopic)
-        bookmarksScreen(
-            onTopicClick = navController::navigateToTopic,
-            onShowSnackbar = onShowSnackbar,
-        )
         searchScreen(
             onBackClick = navController::popBackStack,
             onSourcesClick = { appState.navigateToTopLevelDestination(SOURCES) },

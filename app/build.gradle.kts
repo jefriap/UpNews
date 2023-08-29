@@ -57,7 +57,6 @@ android {
 dependencies {
     implementation(project(":feature:sources"))
     implementation(project(":feature:foryou"))
-    implementation(project(":feature:bookmarks"))
     implementation(project(":feature:topic"))
     implementation(project(":feature:search"))
     implementation(project(":feature:settings"))

@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="11">
       <module name="UpNews.core.analytics" target="17" />
+      <module name="UpNews.feature.bookmarks" target="17" />
       <module name="UpNews.sync.work" target="17" />
     </bytecodeTargetLevel>
   </component>

@@ -188,13 +188,7 @@ fun UpNewsApp(
                             )
                         }
 
-                        UpNewsNavHost(appState = appState, onShowSnackbar = { message, action ->
-                            snackbarHostState.showSnackbar(
-                                message = message,
-                                actionLabel = action,
-                                duration = Short,
-                            ) == ActionPerformed
-                        })
+                        UpNewsNavHost(appState = appState)
                     }
 
                     // TODO: We may want to add padding or spacer when the snackbar is shown so that

@@ -30,17 +30,14 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
 import com.upnews.app.navigation.TopLevelDestination
-import com.upnews.app.navigation.TopLevelDestination.BOOKMARKS
 import com.upnews.app.navigation.TopLevelDestination.FOR_YOU
 import com.upnews.app.navigation.TopLevelDestination.SOURCES
 import com.upnews.core.data.util.NetworkMonitor
-import com.upnews.feature.bookmarks.navigation.bookmarksRoute
-import com.upnews.feature.bookmarks.navigation.navigateToBookmarks
 import com.upnews.feature.foryou.navigation.forYouNavigationRoute
 import com.upnews.feature.foryou.navigation.navigateToForYou
-import com.upnews.feature.sources.navigation.sourcesRoute
-import com.upnews.feature.sources.navigation.navigateToSourcesGraph
 import com.upnews.feature.search.navigation.navigateToSearch
+import com.upnews.feature.sources.navigation.navigateToSourcesGraph
+import com.upnews.feature.sources.navigation.sourcesRoute
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -82,7 +79,6 @@ class UpNewsAppState(
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
             forYouNavigationRoute -> FOR_YOU
-            bookmarksRoute -> BOOKMARKS
             sourcesRoute -> SOURCES
             else -> null
         }
@@ -132,7 +128,6 @@ class UpNewsAppState(
 
             when (topLevelDestination) {
                 FOR_YOU -> navController.navigateToForYou(topLevelNavOptions)
-                BOOKMARKS -> navController.navigateToBookmarks(topLevelNavOptions)
                 SOURCES -> navController.navigateToSourcesGraph(topLevelNavOptions)
             }
         }

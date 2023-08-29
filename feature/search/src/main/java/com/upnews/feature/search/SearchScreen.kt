@@ -19,7 +19,6 @@ package com.upnews.feature.search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.upnews.feature.bookmarks.BookmarksViewModel
 import com.upnews.feature.foryou.ForYouViewModel
 import com.upnews.feature.sources.SourcesViewModel
 
@@ -29,7 +28,6 @@ internal fun SearchRoute(
     onBackClick: () -> Unit,
     onSourcesClick: () -> Unit,
     onTopicClick: (String) -> Unit,
-    bookmarksViewModel: BookmarksViewModel = hiltViewModel(),
     sourcesViewModel: SourcesViewModel = hiltViewModel(),
     searchViewModel: SearchViewModel = hiltViewModel(),
     forYouViewModel: ForYouViewModel = hiltViewModel(),
