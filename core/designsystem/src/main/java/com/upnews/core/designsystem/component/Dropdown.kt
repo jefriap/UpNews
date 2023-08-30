@@ -19,6 +19,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,6 +48,7 @@ fun DropDownMenu(
         expanded = false
         onSelectedItem(items.indexOf(item))
     }
+    val heightMenu = TextFieldDefaults.MinHeight.times(6)
 
     ExposedDropdownMenuBox(
         modifier = modifier,
@@ -67,6 +69,7 @@ fun DropDownMenu(
             onDismissRequest = { expanded = false },
             modifier = Modifier
                 .exposedDropdownSize()
+                .height(heightMenu)
                 .background(color = MaterialTheme.colorScheme.background),
             offset = DpOffset(0.dp, 4.dp),
         ) {

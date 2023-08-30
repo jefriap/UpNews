@@ -17,6 +17,7 @@
 package com.upnews.app.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.upnews.app.ui.UpNewsAppState
@@ -26,6 +27,7 @@ import com.upnews.feature.search.navigation.searchScreen
 import com.upnews.feature.source.navigation.navigateToSource
 import com.upnews.feature.source.navigation.sourceScreen
 import com.upnews.feature.sources.navigation.sourcesGraph
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at
@@ -39,6 +41,7 @@ fun UpNewsNavHost(
     appState: UpNewsAppState,
     modifier: Modifier = Modifier,
     startDestination: String = forYouNavigationRoute,
+    querySourcesSearch: MutableState<String>,
 ) {
     val navController = appState.navController
     NavHost(
@@ -52,6 +55,7 @@ fun UpNewsNavHost(
             onSourceClick = navController::navigateToSource,
         )
         sourcesGraph(
+            querySourcesSearch = querySourcesSearch,
             onSourceClick = navController::navigateToSource,
             nestedGraphs = {
                 sourceScreen(

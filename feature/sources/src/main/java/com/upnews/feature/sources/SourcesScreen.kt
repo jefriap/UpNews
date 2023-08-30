@@ -16,6 +16,7 @@
 
 package com.upnews.feature.sources
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -42,6 +45,7 @@ import com.upnews.core.ui.layout.LayoutIllustration
 
 @Composable
 internal fun SourcesRoute(
+    querySourcesSearch: MutableState<String>,
     onSourceClick: (id: String, name: String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SourcesViewModel = hiltViewModel(),
@@ -56,6 +60,7 @@ internal fun SourcesRoute(
     SourcesScreen(
         modifier = modifier,
         sourcesUiState = sourcesUIState,
+        querySearch = querySourcesSearch,
         selectedCategory = selectedCategory,
         onSelectCategory = performChangeSelectedCategory,
         onSourceClick = onSourceClick,
@@ -66,6 +71,7 @@ internal fun SourcesRoute(
 internal fun SourcesScreen(
     modifier: Modifier = Modifier,
     sourcesUiState: SourcesUiState,
+    querySearch: MutableState<String>,
     selectedCategory: CategoryType?,
     onSelectCategory: (CategoryType?) -> Unit,
     onSourceClick: (id: String, name: String) -> Unit,
@@ -96,7 +102,7 @@ internal fun SourcesScreen(
                      DummyData.sources.Layout(modifier = modifier.fillMaxSize(), isLoading = true)
                 }
                 is SourcesUiState.Success -> {
-                    sourcesUiState.sources.Layout(
+                    sourcesUiState.sources.filter { it.name.contains(querySearch.value, true) }.Layout(
                         modifier = modifier.fillMaxSize(),
                         onSourceClick = onSourceClick,
                     )

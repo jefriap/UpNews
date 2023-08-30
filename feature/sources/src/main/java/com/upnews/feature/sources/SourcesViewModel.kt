@@ -16,6 +16,7 @@
 
 package com.upnews.feature.sources
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.upnews.core.common.result.Result
@@ -25,6 +26,7 @@ import com.upnews.core.data.repository.UserDataRepo
 import com.upnews.core.model.data.CategoryType
 import com.upnews.core.model.data.Source
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
@@ -35,6 +37,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SourcesViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val sourcesRepo: SourcesRepo,
     private val userDataRepo: UserDataRepo,
 ) : ViewModel() {
@@ -46,7 +49,6 @@ class SourcesViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = CategoryType.GENERAL,
     )
-
     val sources = combine(
         selectedCategory,
         userDataRepo.userData.map { it.country }
@@ -87,6 +89,10 @@ class SourcesViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    companion object {
+        private const val SEARCH_QUERY = "search_query"
     }
 }
 

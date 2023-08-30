@@ -33,10 +33,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration.Indefinite
-import androidx.compose.material3.SnackbarDuration.Short
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult.ActionPerformed
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
@@ -54,6 +52,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -73,6 +72,7 @@ import com.upnews.core.designsystem.theme.GradientColors
 import com.upnews.core.designsystem.theme.LocalGradientColors
 import com.upnews.core.designsystem.theme.UpNewsTheme
 import com.upnews.core.ui.DevicePreviews
+import com.upnews.core.ui.component.SearchToolbar
 import com.upnews.feature.settings.SettingsDialog
 import com.upnews.feature.settings.R as settingsR
 
@@ -125,6 +125,13 @@ fun UpNewsApp(
                 )
             }
 
+            var shouldSearchSources by rememberSaveable {
+                mutableStateOf(false)
+            }
+            var querySourcesSearch = rememberSaveable {
+                mutableStateOf("")
+            }
+
             Scaffold(
                 modifier = Modifier.semantics {
                     testTagsAsResourceId = true
@@ -169,7 +176,7 @@ fun UpNewsApp(
                     Column(Modifier.fillMaxSize()) {
                         // Show the top app bar on top level destinations.
                         val destination = appState.currentTopLevelDestination
-                        if (destination != null) {
+                        if (destination != null && !shouldSearchSources) {
                             UpNewsTopAppBar(
                                 titleRes = destination.titleTextId,
                                 navigationIcon = UpNewsIcons.Search,
@@ -184,11 +191,28 @@ fun UpNewsApp(
                                     containerColor = Color.Transparent,
                                 ),
                                 onActionClick = { showSettingsDialog = true },
-                                onNavigationClick = { appState.navigateToSearch() },
+                                onNavigationClick = {
+                                    if (destination == TopLevelDestination.SOURCES) {
+                                        shouldSearchSources = true
+                                    } else {
+                                        appState.navigateToSearch()
+                                    }
+                                },
+                            )
+                        } else {
+                            SearchToolbar(
+                                modifier = Modifier.padding(top = 10.dp),
+                                onBackClick = {
+                                    shouldSearchSources = false
+                                },
+                                onSearchQueryChanged = {
+                                    querySourcesSearch.value = it
+                                },
+                                searchQuery = querySourcesSearch.value,
                             )
                         }
 
-                        UpNewsNavHost(appState = appState)
+                        UpNewsNavHost(appState = appState, querySourcesSearch = querySourcesSearch)
                     }
 
                     // TODO: We may want to add padding or spacer when the snackbar is shown so that

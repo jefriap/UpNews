@@ -16,12 +16,14 @@
 
 package com.upnews.feature.sources.navigation
 
+import androidx.compose.runtime.MutableState
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.upnews.feature.sources.SourcesRoute
+import kotlinx.coroutines.flow.MutableStateFlow
 
 private const val SOURCES_GRAPH_ROUTE_PATTERN = "sources_graph"
 const val sourcesRoute = "sources_route"
@@ -31,6 +33,7 @@ fun NavController.navigateToSourcesGraph(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.sourcesGraph(
+    querySourcesSearch: MutableState<String>,
     onSourceClick: (id: String, name: String) -> Unit,
     nestedGraphs: NavGraphBuilder.() -> Unit,
 ) {
@@ -39,7 +42,10 @@ fun NavGraphBuilder.sourcesGraph(
         startDestination = sourcesRoute,
     ) {
         composable(route = sourcesRoute) {
-            SourcesRoute(onSourceClick)
+            SourcesRoute(
+                querySourcesSearch = querySourcesSearch,
+                onSourceClick
+            )
         }
         nestedGraphs()
     }
