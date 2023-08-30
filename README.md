@@ -16,7 +16,7 @@ This guide will help you set up and run the application successfully.
 ## Configuration
 
 1. Open the project in Android Studio.
-2. Navigate to the directory: `secrets/development.properties`.
+2. Navigate to the directory: `secrets/default.properties`.
 3. Replace Base Url and API Key in default.properties:
    In the `default.properties` file, find the line:
    ```kotlin
