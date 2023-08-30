@@ -17,17 +17,17 @@
 package com.upnews.app.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
-import com.upnews.app.navigation.TopLevelDestination.INTERESTS
 import com.upnews.app.ui.UpNewsAppState
-import com.upnews.feature.bookmarks.navigation.bookmarksScreen
 import com.upnews.feature.foryou.navigation.forYouNavigationRoute
 import com.upnews.feature.foryou.navigation.forYouScreen
-import com.upnews.feature.interests.navigation.interestsGraph
 import com.upnews.feature.search.navigation.searchScreen
-import com.upnews.feature.topic.navigation.navigateToTopic
-import com.upnews.feature.topic.navigation.topicScreen
+import com.upnews.feature.source.navigation.navigateToSource
+import com.upnews.feature.source.navigation.sourceScreen
+import com.upnews.feature.sources.navigation.sourcesGraph
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at
@@ -39,9 +39,9 @@ import com.upnews.feature.topic.navigation.topicScreen
 @Composable
 fun UpNewsNavHost(
     appState: UpNewsAppState,
-    onShowSnackbar: suspend (String, String?) -> Boolean,
     modifier: Modifier = Modifier,
     startDestination: String = forYouNavigationRoute,
+    querySourcesSearch: MutableState<String>,
 ) {
     val navController = appState.navController
     NavHost(
@@ -49,22 +49,18 @@ fun UpNewsNavHost(
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        forYouScreen(onTopicClick = navController::navigateToTopic)
-        bookmarksScreen(
-            onTopicClick = navController::navigateToTopic,
-            onShowSnackbar = onShowSnackbar,
-        )
+        forYouScreen(onSourceClick = navController::navigateToSource)
         searchScreen(
             onBackClick = navController::popBackStack,
-            onInterestsClick = { appState.navigateToTopLevelDestination(INTERESTS) },
-            onTopicClick = navController::navigateToTopic,
+            onSourceClick = navController::navigateToSource,
         )
-        interestsGraph(
-            onTopicClick = navController::navigateToTopic,
+        sourcesGraph(
+            querySourcesSearch = querySourcesSearch,
+            onSourceClick = navController::navigateToSource,
             nestedGraphs = {
-                topicScreen(
+                sourceScreen(
                     onBackClick = navController::popBackStack,
-                    onTopicClick = navController::navigateToTopic,
+                    onSourceClick = navController::navigateToSource,
                 )
             },
         )

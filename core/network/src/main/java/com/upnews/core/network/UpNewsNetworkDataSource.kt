@@ -17,7 +17,8 @@
 package com.upnews.core.network
 
 import com.upnews.core.network.model.BaseResponse
-import com.upnews.core.network.model.NetworkArticle
+import com.upnews.core.network.model.NetworkNews
+import com.upnews.core.network.model.NetworkSource
 
 /**
  * Interface representing network calls to the Up News backend
@@ -25,8 +26,16 @@ import com.upnews.core.network.model.NetworkArticle
 interface UpNewsNetworkDataSource {
     suspend fun getNewsResources(
         path: String,
-        query: String,
+        query: String?,
+        category: String?,
+        country: String?,
+        sourceId: String?,
         page: Int,
         pageSize: Int,
-    ): BaseResponse<List<NetworkArticle>>
+    ): BaseResponse<List<NetworkNews>>
+
+    suspend fun getSources(
+        category: String?,
+        country: String?,
+    ): BaseResponse<List<NetworkSource>>
 }

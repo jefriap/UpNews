@@ -16,14 +16,13 @@
 
 package com.upnews.core.datastore
 
-import android.util.Log
 import androidx.datastore.core.DataStore
+import com.upnews.core.model.data.CategoryType
+import com.upnews.core.model.data.Country
 import com.upnews.core.model.data.DarkThemeConfig
 import com.upnews.core.model.data.ThemeBrand
 import com.upnews.core.model.data.UserData
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import java.io.IOException
 import javax.inject.Inject
 
 class UpNewsPreferencesDataSource @Inject constructor(
@@ -32,9 +31,6 @@ class UpNewsPreferencesDataSource @Inject constructor(
     val userData = userPreferences.data
         .map {
             UserData(
-                bookmarkedNewsResources = it.bookmarkedNewsResourceIdsMap.keys,
-                viewedNewsResources = it.viewedNewsResourceIdsMap.keys,
-                followedTopics = it.followedTopicIdsMap.keys,
                 themeBrand = when (it.themeBrand) {
                     null,
                     ThemeBrandProto.THEME_BRAND_UNSPECIFIED,
@@ -55,40 +51,11 @@ class UpNewsPreferencesDataSource @Inject constructor(
                     DarkThemeConfigProto.DARK_THEME_CONFIG_DARK -> DarkThemeConfig.DARK
                 },
                 useDynamicColor = it.useDynamicColor,
-                shouldHideOnboarding = it.shouldHideOnboarding,
+                category = CategoryType.values()[it.categoryType.ordinal],
+                categorySource = if (it.categorySourcesType == CategorySourcesTypeProto.ALL_SOURCES) null else CategoryType.values()[it.categorySourcesType.ordinal - 1],
+                country = Country.values()[it.country.ordinal],
             )
         }
-
-    suspend fun setFollowedTopicIds(topicIds: Set<String>) {
-        try {
-            userPreferences.updateData {
-                it.copy {
-                    followedTopicIds.clear()
-                    followedTopicIds.putAll(topicIds.associateWith { true })
-                    updateShouldHideOnboardingIfNecessary()
-                }
-            }
-        } catch (ioException: IOException) {
-            Log.e("UpNewsPreferences", "Failed to update user preferences", ioException)
-        }
-    }
-
-    suspend fun toggleFollowedTopicId(topicId: String, followed: Boolean) {
-        try {
-            userPreferences.updateData {
-                it.copy {
-                    if (followed) {
-                        followedTopicIds.put(topicId, true)
-                    } else {
-                        followedTopicIds.remove(topicId)
-                    }
-                    updateShouldHideOnboardingIfNecessary()
-                }
-            }
-        } catch (ioException: IOException) {
-            Log.e("UpNewsPreferences", "Failed to update user preferences", ioException)
-        }
-    }
 
     suspend fun setThemeBrand(themeBrand: ThemeBrand) {
         userPreferences.updateData {
@@ -122,83 +89,31 @@ class UpNewsPreferencesDataSource @Inject constructor(
         }
     }
 
-    suspend fun toggleNewsResourceBookmark(newsResourceId: String, bookmarked: Boolean) {
-        try {
-            userPreferences.updateData {
-                it.copy {
-                    if (bookmarked) {
-                        bookmarkedNewsResourceIds.put(newsResourceId, true)
-                    } else {
-                        bookmarkedNewsResourceIds.remove(newsResourceId)
-                    }
-                }
-            }
-        } catch (ioException: IOException) {
-            Log.e("UpNewsPreferences", "Failed to update user preferences", ioException)
-        }
-    }
-
-    suspend fun setNewsResourceViewed(newsResourceId: String, viewed: Boolean) {
-        setNewsResourcesViewed(listOf(newsResourceId), viewed)
-    }
-
-    suspend fun setNewsResourcesViewed(newsResourceIds: List<String>, viewed: Boolean) {
-        userPreferences.updateData { prefs ->
-            prefs.copy {
-                newsResourceIds.forEach { id ->
-                    if (viewed) {
-                        viewedNewsResourceIds.put(id, true)
-                    } else {
-                        viewedNewsResourceIds.remove(id)
-                    }
-                }
-            }
-        }
-    }
-
-    suspend fun getChangeListVersions() = userPreferences.data
-        .map {
-            ChangeListVersions(
-                topicVersion = it.topicChangeListVersion,
-                newsResourceVersion = it.newsResourceChangeListVersion,
-            )
-        }
-        .firstOrNull() ?: ChangeListVersions()
-
-    /**
-     * Update the [ChangeListVersions] using [update].
-     */
-    suspend fun updateChangeListVersion(update: ChangeListVersions.() -> ChangeListVersions) {
-        try {
-            userPreferences.updateData { currentPreferences ->
-                val updatedChangeListVersions = update(
-                    ChangeListVersions(
-                        topicVersion = currentPreferences.topicChangeListVersion,
-                        newsResourceVersion = currentPreferences.newsResourceChangeListVersion,
-                    ),
-                )
-
-                currentPreferences.copy {
-                    topicChangeListVersion = updatedChangeListVersions.topicVersion
-                    newsResourceChangeListVersion = updatedChangeListVersions.newsResourceVersion
-                }
-            }
-        } catch (ioException: IOException) {
-            Log.e("UpNewsPreferences", "Failed to update user preferences", ioException)
-        }
-    }
-
-    suspend fun setShouldHideOnboarding(shouldHideOnboarding: Boolean) {
+    suspend fun setCategoryPreference(category: CategoryType) {
         userPreferences.updateData {
             it.copy {
-                this.shouldHideOnboarding = shouldHideOnboarding
+                this.categoryType = CategoryTypeProto.values()[category.ordinal]
             }
         }
     }
-}
 
-private fun UserPreferencesKt.Dsl.updateShouldHideOnboardingIfNecessary() {
-    if (followedTopicIds.isEmpty() && followedAuthorIds.isEmpty()) {
-        shouldHideOnboarding = false
+    suspend fun setCategorySourcesPreference(category: CategoryType?) {
+        userPreferences.updateData {
+            it.copy {
+                this.categorySourcesType = when (category) {
+                    null -> CategorySourcesTypeProto.ALL_SOURCES
+                    else -> CategorySourcesTypeProto.values()[category.ordinal + 1]
+                }
+            }
+        }
     }
+
+    suspend fun setCountry(country: Country) {
+        userPreferences.updateData {
+            it.copy {
+                this.country = CountryProto.values()[country.ordinal]
+            }
+        }
+    }
+
 }

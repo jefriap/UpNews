@@ -43,4 +43,5 @@ dependencies {
     implementation(libs.coil.kt.compose)
 
     androidTestImplementation(project(":core:testing"))
+    implementation(project(":core:common"))
 }

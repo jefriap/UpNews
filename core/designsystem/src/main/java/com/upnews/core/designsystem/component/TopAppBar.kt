@@ -102,6 +102,49 @@ fun UpNewsTopAppBar(
     )
 }
 
+/**
+ * Top app bar with action, displayed on the right
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UpNewsTopAppBar(
+    modifier: Modifier = Modifier,
+    title: String,
+    navigationIcon: ImageVector,
+    navigationIconContentDescription: String?,
+    actionIcon: ImageVector? = null,
+    actionIconContentDescription: String? = null,
+    colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
+    onNavigationClick: () -> Unit = {},
+    onActionClick: () -> Unit = {},
+) {
+    CenterAlignedTopAppBar(
+        title = { Text(text = title) },
+        navigationIcon = {
+            IconButton(onClick = onNavigationClick) {
+                Icon(
+                    imageVector = navigationIcon,
+                    contentDescription = navigationIconContentDescription,
+                    tint = MaterialTheme.colorScheme.onSurface,
+                )
+            }
+        },
+        actions = {
+            if (actionIcon != null) {
+                IconButton(onClick = onActionClick) {
+                    Icon(
+                        imageVector = actionIcon,
+                        contentDescription = actionIconContentDescription,
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+            }
+        },
+        colors = colors,
+        modifier = modifier.testTag("upnewsTopAppBar"),
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview("Top App Bar")
 @Composable

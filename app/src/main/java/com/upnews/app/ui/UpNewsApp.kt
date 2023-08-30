@@ -33,10 +33,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration.Indefinite
-import androidx.compose.material3.SnackbarDuration.Short
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult.ActionPerformed
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
@@ -49,9 +47,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -64,7 +59,6 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import com.upnews.app.R
 import com.upnews.app.navigation.TopLevelDestination
 import com.upnews.app.navigation.UpNewsNavHost
-import com.upnews.core.data.repository.UserNewsResourceRepository
 import com.upnews.core.data.util.NetworkMonitor
 import com.upnews.core.designsystem.component.UpNewsBackground
 import com.upnews.core.designsystem.component.UpNewsGradientBackground
@@ -76,6 +70,9 @@ import com.upnews.core.designsystem.component.UpNewsTopAppBar
 import com.upnews.core.designsystem.icon.UpNewsIcons
 import com.upnews.core.designsystem.theme.GradientColors
 import com.upnews.core.designsystem.theme.LocalGradientColors
+import com.upnews.core.designsystem.theme.UpNewsTheme
+import com.upnews.core.ui.DevicePreviews
+import com.upnews.core.ui.component.SearchToolbar
 import com.upnews.feature.settings.SettingsDialog
 import com.upnews.feature.settings.R as settingsR
 
@@ -88,11 +85,9 @@ import com.upnews.feature.settings.R as settingsR
 fun UpNewsApp(
     windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
-    userNewsResourceRepo: UserNewsResourceRepository,
     appState: UpNewsAppState = rememberUpNewsAppState(
         networkMonitor = networkMonitor,
         windowSizeClass = windowSizeClass,
-        userNewsResourceRepo = userNewsResourceRepo,
     ),
 ) {
     val shouldShowGradientBackground =
@@ -130,7 +125,12 @@ fun UpNewsApp(
                 )
             }
 
-            val unreadDestinations by appState.topLevelDestinationsWithUnreadResources.collectAsStateWithLifecycle()
+            var shouldSearchSources by rememberSaveable {
+                mutableStateOf(false)
+            }
+            var querySourcesSearch = rememberSaveable {
+                mutableStateOf("")
+            }
 
             Scaffold(
                 modifier = Modifier.semantics {
@@ -144,7 +144,6 @@ fun UpNewsApp(
                     if (appState.shouldShowBottomBar) {
                         UpNewsBottomBar(
                             destinations = appState.topLevelDestinations,
-                            destinationsWithUnreadResources = unreadDestinations,
                             onNavigateToDestination = appState::navigateToTopLevelDestination,
                             currentDestination = appState.currentDestination,
                             modifier = Modifier.testTag("UpNewsBottomBar"),
@@ -166,7 +165,6 @@ fun UpNewsApp(
                     if (appState.shouldShowNavRail) {
                         UpNewsNavRail(
                             destinations = appState.topLevelDestinations,
-                            destinationsWithUnreadResources = unreadDestinations,
                             onNavigateToDestination = appState::navigateToTopLevelDestination,
                             currentDestination = appState.currentDestination,
                             modifier = Modifier
@@ -178,7 +176,7 @@ fun UpNewsApp(
                     Column(Modifier.fillMaxSize()) {
                         // Show the top app bar on top level destinations.
                         val destination = appState.currentTopLevelDestination
-                        if (destination != null) {
+                        if (destination != null && !shouldSearchSources) {
                             UpNewsTopAppBar(
                                 titleRes = destination.titleTextId,
                                 navigationIcon = UpNewsIcons.Search,
@@ -193,17 +191,28 @@ fun UpNewsApp(
                                     containerColor = Color.Transparent,
                                 ),
                                 onActionClick = { showSettingsDialog = true },
-                                onNavigationClick = { appState.navigateToSearch() },
+                                onNavigationClick = {
+                                    if (destination == TopLevelDestination.SOURCES) {
+                                        shouldSearchSources = true
+                                    } else {
+                                        appState.navigateToSearch()
+                                    }
+                                },
+                            )
+                        } else {
+                            SearchToolbar(
+                                modifier = Modifier.padding(top = 10.dp),
+                                onBackClick = {
+                                    shouldSearchSources = false
+                                },
+                                onSearchQueryChanged = {
+                                    querySourcesSearch.value = it
+                                },
+                                searchQuery = querySourcesSearch.value,
                             )
                         }
 
-                        UpNewsNavHost(appState = appState, onShowSnackbar = { message, action ->
-                            snackbarHostState.showSnackbar(
-                                message = message,
-                                actionLabel = action,
-                                duration = Short,
-                            ) == ActionPerformed
-                        })
+                        UpNewsNavHost(appState = appState, querySourcesSearch = querySourcesSearch)
                     }
 
                     // TODO: We may want to add padding or spacer when the snackbar is shown so that
@@ -217,7 +226,6 @@ fun UpNewsApp(
 @Composable
 private fun UpNewsNavRail(
     destinations: List<TopLevelDestination>,
-    destinationsWithUnreadResources: Set<TopLevelDestination>,
     onNavigateToDestination: (TopLevelDestination) -> Unit,
     currentDestination: NavDestination?,
     modifier: Modifier = Modifier,
@@ -225,7 +233,6 @@ private fun UpNewsNavRail(
     UpNewsNavigationRail(modifier = modifier) {
         destinations.forEach { destination ->
             val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
-            val hasUnread = destinationsWithUnreadResources.contains(destination)
             UpNewsNavigationRailItem(
                 selected = selected,
                 onClick = { onNavigateToDestination(destination) },
@@ -242,7 +249,6 @@ private fun UpNewsNavRail(
                     )
                 },
                 label = { Text(stringResource(destination.iconTextId)) },
-                modifier = if (hasUnread) Modifier.notificationDot() else Modifier,
             )
         }
     }
@@ -251,7 +257,6 @@ private fun UpNewsNavRail(
 @Composable
 private fun UpNewsBottomBar(
     destinations: List<TopLevelDestination>,
-    destinationsWithUnreadResources: Set<TopLevelDestination>,
     onNavigateToDestination: (TopLevelDestination) -> Unit,
     currentDestination: NavDestination?,
     modifier: Modifier = Modifier,
@@ -260,7 +265,6 @@ private fun UpNewsBottomBar(
         modifier = modifier,
     ) {
         destinations.forEach { destination ->
-            val hasUnread = destinationsWithUnreadResources.contains(destination)
             val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
             UpNewsNavigationBarItem(
                 selected = selected,
@@ -278,32 +282,37 @@ private fun UpNewsBottomBar(
                     )
                 },
                 label = { Text(stringResource(destination.iconTextId)) },
-                modifier = if (hasUnread) Modifier.notificationDot() else Modifier,
             )
         }
     }
 }
 
-private fun Modifier.notificationDot(): Modifier =
-    composed {
-        val tertiaryColor = MaterialTheme.colorScheme.tertiary
-        drawWithContent {
-            drawContent()
-            drawCircle(
-                tertiaryColor,
-                radius = 5.dp.toPx(),
-                // This is based on the dimensions of the NavigationBar's "indicator pill";
-                // however, its parameters are private, so we must depend on them implicitly
-                // (NavigationBarTokens.ActiveIndicatorWidth = 64.dp)
-                center = center + Offset(
-                    64.dp.toPx() * .45f,
-                    32.dp.toPx() * -.45f - 6.dp.toPx(),
-                ),
-            )
-        }
-    }
-
 private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) =
     this?.hierarchy?.any {
         it.route?.contains(destination.name, true) ?: false
     } ?: false
+
+
+@DevicePreviews
+@Composable
+private fun UpNewsNavRailPreviews() {
+    UpNewsTheme {
+        UpNewsNavRail(
+            destinations = TopLevelDestination.values().asList(),
+            onNavigateToDestination = {},
+            currentDestination = null,
+        )
+    }
+}
+
+@DevicePreviews
+@Composable
+private fun UpNewsBottomBarPreviews() {
+    UpNewsTheme {
+        UpNewsBottomBar(
+            destinations = TopLevelDestination.values().asList(),
+            onNavigateToDestination = {},
+            currentDestination = null,
+        )
+    }
+}

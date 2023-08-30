@@ -20,7 +20,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.upnews.app.MainActivityUiState.Loading
 import com.upnews.app.MainActivityUiState.Success
-import com.upnews.core.data.repository.UserDataRepository
+import com.upnews.core.data.repository.UserDataRepo
 import com.upnews.core.model.data.UserData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -31,9 +31,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    userDataRepository: UserDataRepository,
+    userDataRepo: UserDataRepo,
 ) : ViewModel() {
-    val uiState: StateFlow<MainActivityUiState> = userDataRepository.userData.map {
+    val uiState: StateFlow<MainActivityUiState> = userDataRepo.userData.map {
         Success(it)
     }.stateIn(
         scope = viewModelScope,

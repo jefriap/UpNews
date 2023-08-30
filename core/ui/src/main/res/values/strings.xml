@@ -19,11 +19,15 @@
     <string name="unbookmark">Unbookmark</string>
     <string name="back">Back</string>
 
+    <string name="category">Kategori</string>
+    <string name="language">Bahasa</string>
+    <string name="country">Negara</string>
+    <string name="visit_page">Kunjungi halaman</string>
+
     <string name="unread_resource_dot_content_description">Unread</string>
+    <string name="search">Search</string>
+    <string name="clear_search_text_content_desc">Clear search text</string>
 
     <string name="card_tap_action">Open Resource Link</string>
     <string name="card_meta_data_text">%1$s • %2$s</string>
-
-    <string name="topic_chip_content_description_when_followed">%1$s is followed</string>
-    <string name="topic_chip_content_description_when_not_followed">%1$s is not followed</string>
 </resources>

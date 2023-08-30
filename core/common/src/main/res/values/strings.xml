@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="try_again">Coba lagi</string>
+    <string name="no_internet">Tidak ada koneksi internet</string>
+    <string name="cannot_load">Tidak dapat memuat</string>
+    <string name="cannot_load_desc">Tidak dapat memuat %s</string>
+
+    <string name="not_found">Tidak ditemukan</string>
+    <string name="not_found_desc">Mohon maaf, hasil tidak ditemukan.</string>
+
+    <string name="image">Gambar</string>
+    <string name="loading">Loading…</string>
+    <string name="select">Select</string>
+
+    <string name="all">semua</string>
+
+    <string name="general">General</string>
+    <string name="business">Business</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="health">Health</string>
+    <string name="science">Science</string>
+    <string name="sports">Sports</string>
+    <string name="technology">Technology</string>
+</resources>

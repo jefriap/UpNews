@@ -21,17 +21,16 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
-sealed interface Result<out T> {
-    data class Success<T>(val data: T) : Result<T>
-    data class Error(val exception: Throwable? = null) : Result<Nothing>
-    data object Loading : Result<Nothing>
-}
 
-fun <T> Flow<T>.asResult(): Flow<Result<T>> {
-    return this
-        .map<T, Result<T>> {
-            Result.Success(it)
-        }
-        .onStart { emit(Result.Loading) }
-        .catch { emit(Result.Error(it)) }
+typealias SimpleResult = Result<Unit>
+
+sealed class Result<T>(
+    val data: T? = null,
+    val message: String? = null,
+    val errorCode: Int? = null,
+) {
+
+    class Loading<T> : Result<T>()
+    class Success<T>(data: T? = null, message: String? = null) : Result<T>(data, message)
+    class Error<T>(message: String, data: T? = null, errorCode: Int? = null) : Result<T>(message = message, data = data, errorCode = errorCode)
 }

@@ -16,19 +16,66 @@
 
 package com.upnews.feature.foryou
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.upnews.core.model.data.CategoryType
+import com.upnews.core.model.data.NewsResource
+import com.upnews.core.ui.layout.CategoriesLayout
+import com.upnews.core.ui.layout.Layout
 
 @Composable
 internal fun ForYouRoute(
-    onTopicClick: (String) -> Unit,
+    onSourceClick: (id: String, name: String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ForYouViewModel = hiltViewModel(),
 ) {
+    val selectedCategory by viewModel.selectedCategory.collectAsStateWithLifecycle()
+    val newsResource = viewModel.newsResources.collectAsLazyPagingItems()
+    
+    val performChangeSelectedCategory = { category: CategoryType ->
+        viewModel.setEvent(ForYouEvent.PerformChangeCategory(category))
+    }
 
+    ForYouScreen(
+        modifier = modifier,
+        selectedCategory = selectedCategory,
+        newsResource = newsResource,
+        onSelectCategory = performChangeSelectedCategory,
+        onSourceClick = onSourceClick,
+    )
+    
 }
 
 @Composable
 internal fun ForYouScreen(
-) {}
+    modifier: Modifier = Modifier,
+    newsResource: LazyPagingItems<NewsResource>,
+    selectedCategory: CategoryType,
+    onSelectCategory: (CategoryType) -> Unit,
+    onSourceClick: (id: String, name: String) -> Unit,
+) {
+    val  categories = CategoryType.values().toList()
+    
+    Column(modifier = modifier.fillMaxWidth()) {
+        CategoriesLayout(
+            isLoading = newsResource.loadState.refresh is LoadState.Loading,
+            categories = categories,
+            selectedCategory = selectedCategory,
+            onSelectCategory = onSelectCategory,
+        )
+
+        newsResource.Layout(
+            modifier = Modifier.weight(1f),
+            onSourceClick = onSourceClick
+        )
+    }
+    
+}

@@ -22,12 +22,13 @@ import kotlinx.datetime.Instant
  * External data layer representation of a fully populated news resource
  */
 data class NewsResource(
-    val id: String,
+    val sourceId: String,
+    val sourceName: String,
+    val author: String,
     val title: String,
-    val content: String,
+    val description: String,
     val url: String,
-    val headerImageUrl: String?,
-    val publishDate: Instant,
-    val type: String,
-    val topics: List<Topic>,
+    val urlToImage: String,
+    val publishedAt: String,
+    val content: String,
 )

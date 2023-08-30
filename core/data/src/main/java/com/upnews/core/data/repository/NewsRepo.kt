@@ -16,15 +16,23 @@
 
 package com.upnews.core.data.repository
 
-import com.upnews.core.model.data.ArticlePath
+import androidx.paging.PagingData
+import com.upnews.core.model.data.CategoryType
+import com.upnews.core.model.data.Country
+import com.upnews.core.model.data.NewsPath
+import com.upnews.core.model.data.NewsResource
+import kotlinx.coroutines.flow.Flow
 
 data class NewsResourceQuery(
-    val path: ArticlePath = ArticlePath.EVERYTHING,
-    val query: String,
+    val path: NewsPath = NewsPath.TOP_HEADLINES,
+    val query: String? = null,
+    val category: CategoryType? = null,
+    val sourceId: String? = null,
+    val country: Country = Country.ALL,
 )
 
 interface NewsRepo {
-//    fun getNewsResources(
-//        query: NewsResourceQuery,
-//    ): Flow<PagingData<NewsResource>>
+    fun getNewsResources(
+        query: NewsResourceQuery,
+    ): Flow<PagingData<NewsResource>>
 }

@@ -41,12 +41,11 @@
             <option value="$PROJECT_DIR$/core/testing" />
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/feature" />
-            <option value="$PROJECT_DIR$/feature/bookmarks" />
             <option value="$PROJECT_DIR$/feature/foryou" />
-            <option value="$PROJECT_DIR$/feature/interests" />
             <option value="$PROJECT_DIR$/feature/search" />
             <option value="$PROJECT_DIR$/feature/settings" />
-            <option value="$PROJECT_DIR$/feature/topic" />
+            <option value="$PROJECT_DIR$/feature/source" />
+            <option value="$PROJECT_DIR$/feature/sources" />
             <option value="$PROJECT_DIR$/lint" />
           </set>
         </option>

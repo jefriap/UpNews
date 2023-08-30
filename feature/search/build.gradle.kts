@@ -25,9 +25,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:bookmarks"))
     implementation(project(":feature:foryou"))
-    implementation(project(":feature:interests"))
+    implementation(project(":feature:sources"))
     implementation(libs.kotlinx.datetime)
+    implementation(libs.androidx.paging)
 }
 

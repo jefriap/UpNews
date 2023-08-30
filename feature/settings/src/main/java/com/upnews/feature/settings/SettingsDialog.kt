@@ -47,8 +47,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.upnews.core.designsystem.component.DropDownMenu
 import com.upnews.core.designsystem.theme.UpNewsTheme
 import com.upnews.core.designsystem.theme.supportsDynamicTheming
+import com.upnews.core.model.data.Country
 import com.upnews.core.model.data.DarkThemeConfig
 import com.upnews.core.model.data.DarkThemeConfig.DARK
 import com.upnews.core.model.data.DarkThemeConfig.FOLLOW_SYSTEM
@@ -59,6 +61,8 @@ import com.upnews.core.model.data.ThemeBrand.DEFAULT
 import com.upnews.feature.settings.R.string
 import com.upnews.feature.settings.SettingsUiState.Loading
 import com.upnews.feature.settings.SettingsUiState.Success
+import com.upnews.core.common.R as CommonR
+import com.upnews.core.ui.R as UiR
 
 @Composable
 fun SettingsDialog(
@@ -66,9 +70,11 @@ fun SettingsDialog(
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val settingsUiState by viewModel.settingsUiState.collectAsStateWithLifecycle()
+
     SettingsDialog(
         onDismiss = onDismiss,
         settingsUiState = settingsUiState,
+        onChangeCountry = viewModel::updateCountry,
         onChangeThemeBrand = viewModel::updateThemeBrand,
         onChangeDynamicColorPreference = viewModel::updateDynamicColorPreference,
         onChangeDarkThemeConfig = viewModel::updateDarkThemeConfig,
@@ -80,6 +86,7 @@ fun SettingsDialog(
     settingsUiState: SettingsUiState,
     supportDynamicColor: Boolean = supportsDynamicTheming(),
     onDismiss: () -> Unit,
+    onChangeCountry: (Country) -> Unit,
     onChangeThemeBrand: (themeBrand: ThemeBrand) -> Unit,
     onChangeDynamicColorPreference: (useDynamicColor: Boolean) -> Unit,
     onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit,
@@ -109,7 +116,7 @@ fun SettingsDialog(
                 when (settingsUiState) {
                     Loading -> {
                         Text(
-                            text = stringResource(string.loading),
+                            text = stringResource(CommonR.string.loading),
                             modifier = Modifier.padding(vertical = 16.dp),
                         )
                     }
@@ -118,6 +125,7 @@ fun SettingsDialog(
                         SettingsPanel(
                             settings = settingsUiState.settings,
                             supportDynamicColor = supportDynamicColor,
+                            onChangeCountry = onChangeCountry,
                             onChangeThemeBrand = onChangeThemeBrand,
                             onChangeDynamicColorPreference = onChangeDynamicColorPreference,
                             onChangeDarkThemeConfig = onChangeDarkThemeConfig,
@@ -145,10 +153,18 @@ fun SettingsDialog(
 private fun ColumnScope.SettingsPanel(
     settings: UserEditableSettings,
     supportDynamicColor: Boolean,
+    onChangeCountry: (Country) -> Unit,
     onChangeThemeBrand: (themeBrand: ThemeBrand) -> Unit,
     onChangeDynamicColorPreference: (useDynamicColor: Boolean) -> Unit,
     onChangeDarkThemeConfig: (darkThemeConfig: DarkThemeConfig) -> Unit,
 ) {
+    val countries = Country.values()
+    SettingsDialogSectionTitle(text = stringResource(UiR.string.country))
+    DropDownMenu(
+        items = countries.map { it.value },
+        onSelectedItem = { onChangeCountry(countries[it]) },
+        selectedItemIndex = countries.indexOf(settings.country),
+    )
     SettingsDialogSectionTitle(text = stringResource(string.theme))
     Column(Modifier.selectableGroup()) {
         SettingsDialogThemeChooserRow(
@@ -245,8 +261,10 @@ private fun PreviewSettingsDialog() {
                     brand = DEFAULT,
                     darkThemeConfig = FOLLOW_SYSTEM,
                     useDynamicColor = false,
+                    country = Country.INDONESIA,
                 ),
             ),
+            onChangeCountry = {},
             onChangeThemeBrand = {},
             onChangeDynamicColorPreference = {},
             onChangeDarkThemeConfig = {},
@@ -261,14 +279,10 @@ private fun PreviewSettingsDialogLoading() {
         SettingsDialog(
             onDismiss = {},
             settingsUiState = Loading,
+            onChangeCountry = {},
             onChangeThemeBrand = {},
             onChangeDynamicColorPreference = {},
             onChangeDarkThemeConfig = {},
         )
     }
 }
-
-/* ktlint-disable max-line-length */
-private const val PRIVACY_POLICY_URL = "https://policies.google.com/privacy"
-private const val BRAND_GUIDELINES_URL = "https://developer.android.com/distribute/marketing-tools/brand-guidelines"
-private const val FEEDBACK_URL = "https://goo.gle/nia-app-feedback"

@@ -30,22 +30,16 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
 import com.upnews.app.navigation.TopLevelDestination
-import com.upnews.app.navigation.TopLevelDestination.BOOKMARKS
 import com.upnews.app.navigation.TopLevelDestination.FOR_YOU
-import com.upnews.app.navigation.TopLevelDestination.INTERESTS
-import com.upnews.core.data.repository.UserNewsResourceRepository
+import com.upnews.app.navigation.TopLevelDestination.SOURCES
 import com.upnews.core.data.util.NetworkMonitor
-import com.upnews.feature.bookmarks.navigation.bookmarksRoute
-import com.upnews.feature.bookmarks.navigation.navigateToBookmarks
 import com.upnews.feature.foryou.navigation.forYouNavigationRoute
 import com.upnews.feature.foryou.navigation.navigateToForYou
-import com.upnews.feature.interests.navigation.interestsRoute
-import com.upnews.feature.interests.navigation.navigateToInterestsGraph
 import com.upnews.feature.search.navigation.navigateToSearch
+import com.upnews.feature.sources.navigation.navigateToSourcesGraph
+import com.upnews.feature.sources.navigation.sourcesRoute
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
@@ -53,7 +47,6 @@ import kotlinx.coroutines.flow.stateIn
 fun rememberUpNewsAppState(
     windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
-    userNewsResourceRepo: UserNewsResourceRepository,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
 ): UpNewsAppState {
@@ -62,14 +55,12 @@ fun rememberUpNewsAppState(
         coroutineScope,
         windowSizeClass,
         networkMonitor,
-        userNewsResourceRepo,
     ) {
         UpNewsAppState(
             navController,
             coroutineScope,
             windowSizeClass,
             networkMonitor,
-            userNewsResourceRepo,
         )
     }
 }
@@ -80,7 +71,6 @@ class UpNewsAppState(
     val coroutineScope: CoroutineScope,
     val windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
-    userNewsResourceRepo: UserNewsResourceRepository,
 ) {
     val currentDestination: NavDestination?
         @Composable get() = navController
@@ -89,8 +79,7 @@ class UpNewsAppState(
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
             forYouNavigationRoute -> FOR_YOU
-            bookmarksRoute -> BOOKMARKS
-            interestsRoute -> INTERESTS
+            sourcesRoute -> SOURCES
             else -> null
         }
 
@@ -113,20 +102,6 @@ class UpNewsAppState(
      * route.
      */
     val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList()
-
-    /**
-     * The top level destinations that have unread news resources.
-     */
-    val topLevelDestinationsWithUnreadResources: StateFlow<Set<TopLevelDestination>> = flowOf(
-        setOfNotNull(
-            FOR_YOU,
-            BOOKMARKS,
-        )
-    ).stateIn(
-        coroutineScope,
-        SharingStarted.WhileSubscribed(5_000),
-        initialValue = emptySet(),
-    )
 
     /**
      * UI logic for navigating to a top level destination in the app. Top level destinations have
@@ -153,8 +128,7 @@ class UpNewsAppState(
 
             when (topLevelDestination) {
                 FOR_YOU -> navController.navigateToForYou(topLevelNavOptions)
-                BOOKMARKS -> navController.navigateToBookmarks(topLevelNavOptions)
-                INTERESTS -> navController.navigateToInterestsGraph(topLevelNavOptions)
+                SOURCES -> navController.navigateToSourcesGraph(topLevelNavOptions)
             }
         }
     }
