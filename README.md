@@ -40,3 +40,11 @@ This guide will help you set up and run the application successfully.
 
 ## Kotlin-DSL Build Scripts
 The project uses Kotlin-DSL build scripts to manage dependencies and plugins.
+
+## References
+
+For additional information and resources, you may find the following references helpful:
+
+- [Project Repository](https://github.com/android/nowinandroid): Check out the official repository for more insights into the Android NowInAndroid project.
+
+Feel free to explore these references to gain a deeper understanding of the project's background and related materials.
