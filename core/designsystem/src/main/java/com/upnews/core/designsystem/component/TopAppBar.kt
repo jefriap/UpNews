@@ -108,22 +108,36 @@ fun UpNewsTopAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpNewsTopAppBar(
-    title: String,
-    actionIcon: ImageVector,
-    actionIconContentDescription: String?,
     modifier: Modifier = Modifier,
+    title: String,
+    navigationIcon: ImageVector,
+    navigationIconContentDescription: String?,
+    actionIcon: ImageVector? = null,
+    actionIconContentDescription: String? = null,
     colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
+    onNavigationClick: () -> Unit = {},
     onActionClick: () -> Unit = {},
 ) {
     CenterAlignedTopAppBar(
         title = { Text(text = title) },
-        actions = {
-            IconButton(onClick = onActionClick) {
+        navigationIcon = {
+            IconButton(onClick = onNavigationClick) {
                 Icon(
-                    imageVector = actionIcon,
-                    contentDescription = actionIconContentDescription,
+                    imageVector = navigationIcon,
+                    contentDescription = navigationIconContentDescription,
                     tint = MaterialTheme.colorScheme.onSurface,
                 )
+            }
+        },
+        actions = {
+            if (actionIcon != null) {
+                IconButton(onClick = onActionClick) {
+                    Icon(
+                        imageVector = actionIcon,
+                        contentDescription = actionIconContentDescription,
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
             }
         },
         colors = colors,

@@ -34,7 +34,7 @@ private val URL_CHARACTER_ENCODING = UTF_8.name()
 internal const val sourceIdArg = "sourceId"
 internal const val sourceNameArg = "sourceName"
 
-internal class SourceArgs(val sourceId: String, val sourceName: String) {
+class SourceArgs(val sourceId: String, val sourceName: String) {
     constructor(savedStateHandle: SavedStateHandle) :
         this(
             URLDecoder.decode(checkNotNull(savedStateHandle[sourceIdArg]), URL_CHARACTER_ENCODING),

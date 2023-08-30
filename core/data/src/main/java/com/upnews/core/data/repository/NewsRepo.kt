@@ -28,7 +28,7 @@ data class NewsResourceQuery(
     val query: String? = null,
     val category: CategoryType? = null,
     val sourceId: String? = null,
-    val country: Country,
+    val country: Country = Country.ALL,
 )
 
 interface NewsRepo {

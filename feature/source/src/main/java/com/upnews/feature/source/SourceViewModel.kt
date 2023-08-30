@@ -18,14 +18,28 @@ package com.upnews.feature.source
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
+import com.upnews.core.data.repository.NewsRepo
+import com.upnews.core.data.repository.NewsResourceQuery
 import com.upnews.feature.source.navigation.SourceArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
 class SourceViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val newsRepo: NewsRepo,
 ) : ViewModel() {
 
-    private val sourceArgs: SourceArgs = SourceArgs(savedStateHandle)
+    val sourceArgs: SourceArgs = SourceArgs(savedStateHandle)
+
+    val newsResources = newsRepo.getNewsResources(
+        query = NewsResourceQuery(
+            sourceId = sourceArgs.sourceId,
+        ),
+    ).cachedIn(viewModelScope)
 }

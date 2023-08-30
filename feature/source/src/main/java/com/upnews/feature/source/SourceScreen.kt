@@ -16,25 +16,20 @@
 
 package com.upnews.feature.source
 
-import androidx.annotation.VisibleForTesting
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.upnews.core.designsystem.component.UpNewsTopAppBar
 import com.upnews.core.designsystem.icon.UpNewsIcons
+import com.upnews.core.model.data.NewsResource
+import com.upnews.core.ui.layout.Layout
 
 @Composable
 internal fun SourceRoute(
@@ -42,26 +37,46 @@ internal fun SourceRoute(
     onSourceClick: (id: String, name: String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SourceViewModel = hiltViewModel(),
-) {}
+) {
+    val newsResource = viewModel.newsResources.collectAsLazyPagingItems()
+    val title = viewModel.sourceArgs.sourceName
+
+    SourceScreen(
+        modifier = modifier,
+        title = title,
+        newsResource = newsResource,
+        onSourceClick = onSourceClick,
+        onBackClick = onBackClick,
+    )
+}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SourceScreen(
+    modifier: Modifier = Modifier,
+    title: String,
+    newsResource: LazyPagingItems<NewsResource>,
+    onSourceClick: (id: String, name: String) -> Unit,
     onBackClick: () -> Unit
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .statusBarsPadding()
     ) {
         UpNewsTopAppBar(
-            title = "",
-            actionIcon =  UpNewsIcons.ArrowBack,
-            actionIconContentDescription = stringResource(
+            title = title,
+            navigationIcon =  UpNewsIcons.ArrowBack,
+            navigationIconContentDescription = stringResource(
                 id = com.upnews.core.ui.R.string.back,
             ),
-            onActionClick = onBackClick,
+            onNavigationClick = onBackClick,
+        )
+
+        newsResource.Layout(
+            modifier = Modifier.weight(1f),
+            onSourceClick = onSourceClick
         )
     }
 }
