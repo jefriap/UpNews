@@ -16,10 +16,45 @@
 
 package com.upnews.feature.search
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
+import com.upnews.core.data.repository.NewsRepo
+import com.upnews.core.data.repository.NewsResourceQuery
+import com.upnews.core.model.data.CategoryType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-) : ViewModel() {}
+    private val savedStateHandle: SavedStateHandle,
+    private val newsRepo: NewsRepo,
+) : ViewModel() {
+
+    val searchQuery = savedStateHandle.getStateFlow(key = SEARCH_QUERY, initialValue = "")
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), "")
+
+    val newsResources = searchQuery.debounce(1.seconds).flatMapLatest {
+            newsRepo.getNewsResources(
+                if (it.isEmpty()) NewsResourceQuery(
+                    category = CategoryType.GENERAL
+                ) else NewsResourceQuery(
+                    query = it
+                )
+            )
+    }.cachedIn(viewModelScope)
+
+    fun onSearchQueryChanged(query: String) {
+        savedStateHandle[SEARCH_QUERY] = query
+    }
+
+    companion object {
+        private const val SEARCH_QUERY = "search_query"
+    }
+}

@@ -40,7 +40,6 @@ fun LazyPagingItems<NewsResource>.Layout(
                     title = stringResource(id = RCommon.string.not_found),
                     desc = (loadState.refresh as? LoadState.Error)?.error?.message
                         ?: stringResource(id = RCommon.string.not_found_desc),
-                    onClickAction = { refresh() },
                     image = R.drawable.ic_lightbulb_question,
                 )
             }

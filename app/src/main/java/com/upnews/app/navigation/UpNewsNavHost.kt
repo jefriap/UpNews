@@ -19,14 +19,13 @@ package com.upnews.app.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
-import com.upnews.app.navigation.TopLevelDestination.SOURCES
 import com.upnews.app.ui.UpNewsAppState
 import com.upnews.feature.foryou.navigation.forYouNavigationRoute
 import com.upnews.feature.foryou.navigation.forYouScreen
-import com.upnews.feature.sources.navigation.sourcesGraph
 import com.upnews.feature.search.navigation.searchScreen
 import com.upnews.feature.source.navigation.navigateToSource
 import com.upnews.feature.source.navigation.sourceScreen
+import com.upnews.feature.sources.navigation.sourcesGraph
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at
@@ -50,7 +49,6 @@ fun UpNewsNavHost(
         forYouScreen(onSourceClick = navController::navigateToSource)
         searchScreen(
             onBackClick = navController::popBackStack,
-            onSourcesClick = { appState.navigateToTopLevelDestination(SOURCES) },
             onSourceClick = navController::navigateToSource,
         )
         sourcesGraph(

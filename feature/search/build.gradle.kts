@@ -28,5 +28,6 @@ dependencies {
     implementation(project(":feature:foryou"))
     implementation(project(":feature:sources"))
     implementation(libs.kotlinx.datetime)
+    implementation(libs.androidx.paging)
 }
 
